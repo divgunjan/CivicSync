@@ -1,27 +1,13 @@
 {
-  "name": "civicsync-nmit-2026",
+  "name": "spoilt-indian-map-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "type": "module",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/divgunjan/CivicSync.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/divgunjan/CivicSync/issues"
-  },
-  "homepage": "https://github.com/divgunjan/CivicSync#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "mongoose": "^9.6.1",
+    "multer": "^2.1.1"
   }
 }
