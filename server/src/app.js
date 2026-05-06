@@ -1,18 +1,28 @@
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
 import reportRoutes from "./routes/report.routes.js";
+
+dotenv.config();
 
 const app = express();
 
-// incoming JSON -> usable JS object
+app.use(cors());
 app.use(express.json());
+
+// DB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("DB connected"))
+  .catch(err => console.log("DB connection error:", err));
+
+// routes
 app.use("/report", reportRoutes);
 
-const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/spoilt";
-mongoose
-	.connect(mongoUri)
-	.then(() => console.log("DB connected."))
-	.catch((err) => console.error("DB connection error:", err));
+// serve uploads
+app.use("/uploads", express.static("uploads"));
 
-const port = Number(process.env.PORT || 5000);
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});
+
