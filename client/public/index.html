@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSIM - Login / Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Desktop Top Nav -->
+    <div class="top-nav">
+        New here? <a href="#" onclick="activateSignup()">Sign up</a>
+    </div>
+
+    <div class="container">
+        <!-- Left Section -->
+        <div class="hero-section">
+            <div class="logo">
+                <img src="tsim-logo.svg" width="60" />
+                <div class="logo-text">
+                    <h2>TSIM</h2>
+                    <span>The Spoilt Indian Map</span>
+                </div>
+            </div>
+
+            <div class="hero-text">
+                <h1>Report Issues.<br><span class="green">Build Better India.</span></h1>
+                <p>Pin. Report. Track.</p>
+                <p>Together, we can make our cities<br>cleaner, safer and better.</p>
+            </div>
+
+            <!-- Features Desktop -->
+            <div class="features-bar desktop-only">
+                <div class="feature-item">
+                    <h4>Secure & Reliable</h4>
+                    <p>Your data is safe with us</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Citizen Driven</h4>
+                    <p>By citizens, for citizens</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Stronger Communities</h4>
+                    <p>Together we create change</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="form-section">
+            <div class="login-card">
+
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab(this)">Login</div>
+                    <div class="tab" onclick="switchTab(this)">Sign Up</div>
+                </div>
+
+                <form id="authForm">
+
+                    <!-- NAME (SIGNUP ONLY) -->
+                    <div class="input-group" id="nameField" style="display:none;">
+                        <input type="text" id="name" placeholder="Full Name">
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="input-group">
+                        <input type="email" placeholder="Email address" required>
+                    </div>
+
+                    <!-- PASSWORD -->
+                    <div class="input-group">
+                        <input type="password" id="passwordField" placeholder="Password" required>
+                    </div>
+
+                    <!-- CONFIRM PASSWORD (SIGNUP ONLY) -->
+                    <div class="input-group" id="confirmPasswordField" style="display:none;">
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox-group">
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <a href="#">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Login</button>
+
+                </form>
+
+                <div class="divider">or continue with</div>
+
+                <button class="btn-social">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+                    Continue with Google
+                </button>
+
+                <button class="btn-social">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                        width="20">
+                    Continue with Facebook
+                </button>
+
+                
+
+                <div class="card-footer">
+                    Don't have an account? <a href="#" onclick="activateSignup()">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        function switchTab(clickedTab) {
+            let tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            clickedTab.classList.add('active');
+
+            const isSignup = clickedTab.innerText === "Sign Up";
+
+            document.getElementById("nameField").style.display = isSignup ? "block" : "none";
+            document.getElementById("confirmPasswordField").style.display = isSignup ? "block" : "none";
+
+            document.querySelector(".btn-primary").innerText =
+                isSignup ? "Create Account" : "Login";
+        }
+
+        function activateSignup() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs[1].click();
+        }
+    </script>
+
+</body>
+
+</html>

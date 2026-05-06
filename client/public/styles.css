@@ -1,0 +1,420 @@
+ :root {
+     --primary-dark: #121e31;
+     --primary-green: #1a7c36;
+     --text-muted: #6b7280;
+     --border-light: #e5e7eb;
+     --bg-color: #f0f4f8;
+     /* Fallback for background image */
+     --white: #ffffff;
+     --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+ }
+
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: var(--font-family);
+ }
+
+ body {
+     background-color: var(--bg-color);
+     background-image: url("background.png");
+     background-size: 50%;
+     background-position: 9% 70%;
+     background-attachment: fixed;
+     min-height: 100vh;
+     background-repeat: no-repeat;
+     
+     color: var(--primary-dark);
+ }
+
+ a {
+     text-decoration: none;
+     color: var(--primary-green);
+ }
+
+ /* Top Right Nav (Desktop only) */
+ .top-nav {
+     position: absolute;
+     top: 30px;
+     right: 40px;
+     font-size: 0.9rem;
+     color: var(--text-muted);
+     z-index: 10;
+ }
+
+ /* Main Layout */
+ .container {
+     display: flex;
+     min-height: 100vh;
+     max-width: 1400px;
+     margin: 0 auto;
+     position: relative;
+ }
+
+ /* Left Section */
+ .hero-section {
+     flex: 1;
+     padding: 30px 60px;
+     display: flex;
+     flex-direction: column;
+     justify-content: flex-start;
+ }
+
+ .logo {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     margin-bottom: 30px;
+ }
+
+ .logo-icon {
+     width: 40px;
+     height: auto;
+ }
+
+ .logo-text h2 {
+     font-size: 1.8rem;
+     font-weight: 800;
+     letter-spacing: 1px;
+     line-height: 1;
+ }
+
+ .logo-text span {
+     font-size: 0.75rem;
+     font-weight: 500;
+     color: var(--primary-dark);
+ }
+
+ .hero-text h1 {
+     font-size: rem;
+     line-height: 1.2;
+     margin-bottom: 20px;
+ }
+
+ .hero-text h1 .green {
+     color: var(--primary-green);
+ }
+
+ .hero-text p {
+     font-size: 1.1rem;
+     color: var(--primary-dark);
+     line-height: 1.6;
+     margin-bottom: 5px;
+ }
+
+ /* Features Bar */
+ .features-bar {
+     background: var(--white);
+     border-radius: 16px;
+     padding: 20px 30px;
+     display: flex;
+     justify-content: space-between;
+     margin-top: auto;
+     /* Pushes to bottom of left column */
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+     max-width: 600px;
+     z-index: 2;
+ }
+
+ .feature-item {
+     text-align: center;
+     flex: 1;
+     border-right: 1px solid var(--border-light);
+ }
+
+ .feature-item:last-child {
+     border-right: none;
+ }
+
+ .feature-item svg {
+     width: 32px;
+     height: 32px;
+     color: var(--primary-green);
+     margin-bottom: 8px;
+ }
+
+ .feature-item h4 {
+     font-size: 0.85rem;
+     margin-bottom: 4px;
+ }
+
+ .feature-item p {
+     font-size: 0.75rem;
+     color: var(--text-muted);
+ }
+
+ /* Right Section (Form) */
+ .form-section {
+     width: 500px;
+     padding: 40px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     z-index: 5;
+ }
+
+ .login-card {
+     background: var(--white);
+     width: 100%;
+     padding: 40px;
+     border-radius: 16px;
+     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+     margin-top: 40px;
+ }
+
+ /* Tabs */
+ .tabs {
+     display: flex;
+     border-bottom: 1px solid var(--border-light);
+     margin-bottom: 30px;
+ }
+
+ .tab {
+     flex: 1;
+     text-align: center;
+     padding: 15px 0;
+     font-weight: 600;
+     font-size: 1rem;
+     color: var(--text-muted);
+     cursor: pointer;
+     border-bottom: 2px solid transparent;
+     transition: all 0.3s;
+ }
+
+ .tab.active {
+     color: var(--primary-green);
+     border-bottom-color: var(--primary-green);
+ }
+
+ /* Form Inputs */
+ .input-group {
+     position: relative;
+     margin-bottom: 20px;
+ }
+
+ .input-group svg {
+     position: absolute;
+     left: 15px;
+     top: 50%;
+     transform: translateY(-50%);
+     color: var(--text-muted);
+     width: 20px;
+     height: 20px;
+ }
+
+ .input-group input {
+     width: 100%;
+     padding: 14px 15px 14px 45px;
+     border: 1px solid var(--border-light);
+     border-radius: 8px;
+     font-size: 0.95rem;
+     outline: none;
+     transition: border-color 0.3s;
+ }
+
+ .input-group input:focus {
+     border-color: var(--primary-green);
+ }
+
+ .eye-icon {
+     position: absolute;
+     right: 15px;
+     left: auto !important;
+     cursor: pointer;
+ }
+
+ /* Form Options */
+ .form-options {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 25px;
+     font-size: 0.85rem;
+ }
+
+ .checkbox-group {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     color: var(--text-muted);
+ }
+
+ .checkbox-group input {
+     width: 16px;
+     height: 16px;
+     accent-color: var(--primary-green);
+     cursor: pointer;
+ }
+
+ .form-options a {
+     font-weight: 500;
+ }
+
+ /* Buttons */
+ .btn-primary {
+     width: 100%;
+     background-color: var(--primary-green);
+     color: var(--white);
+     border: none;
+     border-radius: 8px;
+     padding: 15px;
+     font-size: 1rem;
+     font-weight: 600;
+     cursor: pointer;
+     transition: background-color 0.3s;
+     margin-bottom: 30px;
+ }
+
+ .btn-primary:hover {
+     background-color: #15662b;
+ }
+
+ /* Dividers */
+ .divider {
+     display: flex;
+     align-items: center;
+     text-align: center;
+     color: var(--text-muted);
+     font-size: 0.85rem;
+     margin-bottom: 20px;
+ }
+
+ .divider::before,
+ .divider::after {
+     content: '';
+     flex: 1;
+     border-bottom: 1px solid var(--border-light);
+ }
+
+ .divider::before {
+     margin-right: 15px;
+ }
+
+ .divider::after {
+     margin-left: 15px;
+ }
+
+ /* Social Buttons */
+ .btn-social {
+     width: 100%;
+     background: var(--white);
+     border: 1px solid var(--border-light);
+     border-radius: 8px;
+     padding: 12px;
+     margin-bottom: 15px;
+     font-size: 0.95rem;
+     font-weight: 600;
+     color: var(--primary-dark);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 10px;
+     cursor: pointer;
+     transition: background-color 0.3s;
+ }
+
+ .btn-social:hover {
+     background-color: #f9fafb;
+ }
+
+ /* Footer Link inside card */
+ .card-footer {
+     text-align: center;
+     margin-top: 30px;
+     font-size: 0.9rem;
+     color: var(--text-muted);
+ }
+
+ /* Responsive Design */
+ .features-mobile {
+     display: none;
+ }
+
+ /* --- Mobile Responsive Bit --- */
+
+@media (max-width: 900px) {
+    /* 1. Adjust background for the map-view look */
+    body {
+        background-size: 70%;
+        background-position: 50% 20%;
+        background-attachment: scroll;
+    }
+
+    /* 2. Stack the layout vertically */
+    .container {
+        flex-direction: column;
+    }
+
+    /* 3. Reorder Hero Section (Top) */
+    .hero-section {
+        padding: 40px 20px;
+        align-items: center;
+        text-align: center;
+        order: 1;
+    }
+
+    .logo { margin-bottom: 20px;}
+    .hero-text h1 { font-size: 1.2rem; }
+    .hero-text p { font-size: 0.95rem; }
+
+    .logo .logo-text h2{
+        font-size: 4rem;
+    }
+
+   
+
+    /* Hide desktop features bar */
+    .features-bar.desktop-only { display: none; }
+
+    /* 4. Transform Form Section into a Bottom Sheet */
+    .form-section {
+        display: block;
+        width: 80%;
+        padding: 0;
+        margin-top: 40px;
+        margin-left: 50px;
+        order: 1000;
+    }
+
+    .login-card {
+        border-radius: 30px; /* Creates the rounded 'sheet' look */
+        padding: 30px 20px;
+        box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
+        animation: slideUp 0.6s ease-out; /* Smooth entrance */
+    }
+
+    /* 5. Style the Bottom Navigation (Mobile Features) */
+    .features-mobile {
+        display: flex;
+        background: #f1f5f3; /* Light tinted background */
+        padding: 15px 10px;
+        margin-top: 0;
+        border-radius: 0;
+        max-width: 100%;
+        order: 3;
+        box-shadow: none;
+    }
+
+    .features-mobile .feature-item {
+        border-right: 1px solid #d1d5db;
+        padding: 0 5px;
+    }
+
+    .features-mobile .feature-item:last-child {
+        border-right: none;
+    }
+
+    .features-mobile h4 {
+        font-size: 0.7rem;
+        line-height: 1.2;
+    }
+    
+    .top-nav { display: none; } /* Hide 'Sign Up' link in top corner */
+}
+
+/* --- Smooth Transition Keyframes --- */
+@keyframes slideUp {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}

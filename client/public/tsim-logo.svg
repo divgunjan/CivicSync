@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Pin base -->
+  <path d="M32 2C18 2 8 12 8 26c0 16 24 36 24 36s24-20 24-36C56 12 46 2 32 2z" fill="#ffffff"/>
+
+  <!-- Saffron (top) -->
+  <path d="M32 2C22 2 14 8 10 18h44C50 8 42 2 32 2z" fill="#FF9933"/>
+
+  <!-- White middle -->
+  <ellipse cx="32" cy="26" rx="12" ry="10" fill="#ffffff"/>
+
+  <!-- Green (bottom) -->
+  <path d="M10 34c4 10 12 18 22 28 10-10 18-18 22-28H10z" fill="#138808"/>
+
+  <!-- Ashoka Chakra -->
+  <circle cx="32" cy="26" r="4.5" fill="none" stroke="#000080" stroke-width="1.5"/>
+
+</svg>
