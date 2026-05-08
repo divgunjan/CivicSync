@@ -15,6 +15,44 @@
      box-sizing: border-box;
      font-family: var(--font-family);
  }
+.btn-guest {
+  display: flex;
+ align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 20px;
+  border: 1.5px solid #1a7c36;
+  border-radius: 12px;
+  background: #ebfff0;
+  color: #1a7c36;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s;
+  position: relative;
+}
+
+.btn-guest:hover {
+  background: #f0faf3;
+  transform: translateY(-1px);
+}
+
+.btn-guest:active {
+  transform: scale(0.98);
+  background: #e0f5e8;
+}
+
+.btn-guest .badge {
+  position: absolute;
+  right: 14px;
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #e6f5ea;
+  color: #1a6830;
+}
 
  body {
      background-color: var(--bg-color);
