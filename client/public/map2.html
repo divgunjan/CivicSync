@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Issue Details — Step 2 — Spoilt Indian Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0B1F3A; --green:#1A9E4A; --green-dark:#157A3A; --green-bg:#EAF7EE;
+  --saffron:#E8831A; --saffron-bg:#FEF3E8;
+  --page-bg:#EEF3FA; --white:#FFFFFF;
+  --border:#DDE5F0; --border-focus:#1A9E4A;
+  --text-body:#4A5568; --text-muted:#8A97AA; --text-label:#2D3748;
+  --red:#E53E3E; --amber:#D97706;
+  --shadow-sm:0 1px 4px rgba(11,31,58,0.07);
+  --shadow-md:0 4px 20px rgba(11,31,58,0.10);
+  --shadow-lg:0 8px 40px rgba(11,31,58,0.13);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Poppins',sans-serif;background:var(--page-bg);color:var(--navy)}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  height:62px;background:rgba(238,243,250,0.97);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0 28px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.nav-logo svg{width:34px;height:34px}
+.nav-brand{font-size:16px;font-weight:700;color:var(--navy)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-muted);text-decoration:none;transition:color .18s}
+.nav-back:hover{color:var(--navy)}
+.nav-step-pill{
+  display:flex;align-items:center;gap:0;
+  background:white;border:1px solid var(--border);
+  border-radius:100px;padding:4px;
+}
+.step-pill-item{
+  padding:5px 14px;border-radius:100px;
+  font-size:12px;font-weight:600;color:var(--text-muted);
+  transition:all .2s;cursor:default;white-space:nowrap;
+}
+.step-pill-item.active{background:var(--navy);color:white}
+.step-pill-item.done{color:var(--green)}
+
+.container{
+  max-width:640px;margin:0 auto;padding:100px 24px 40px;
+  min-height:100vh;display:flex;flex-direction:column;
+}
+
+.form-header{margin-bottom:28px}
+.form-header-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--green-bg);border:1px solid rgba(26,158,74,.2);
+  border-radius:100px;padding:3px 11px;
+  font-size:11px;font-weight:600;color:var(--green);
+  margin-bottom:10px;
+}
+.form-header h2{font-size:22px;font-weight:800;color:var(--navy);letter-spacing:-.4px;margin-bottom:4px}
+.form-header p{font-size:13px;color:var(--text-muted);line-height:1.55}
+
+.form-body{flex:1;display:flex;flex-direction:column;gap:24px}
+
+.field{display:flex;flex-direction:column;gap:7px}
+.field-label{
+  font-size:12px;font-weight:700;color:var(--text-label);
+  text-transform:uppercase;letter-spacing:.6px;
+  display:flex;align-items:center;gap:6px;
+}
+.field-label .req{color:var(--red);font-size:14px;line-height:1}
+.field-hint{font-size:12px;color:var(--text-muted);margin-top:-4px}
+
+/* Issue type grid */
+.issue-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.issue-tile{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 8px;border-radius:10px;
+  border:1.5px solid var(--border);background:var(--page-bg);
+  cursor:pointer;transition:all .18s;
+  font-size:11px;font-weight:600;color:var(--text-body);
+  text-align:center;line-height:1.3;
+}
+.issue-tile:hover{border-color:var(--green);background:var(--green-bg);color:var(--navy)}
+.issue-tile.selected{
+  border-color:var(--green);background:var(--green-bg);
+  color:var(--green);
+  box-shadow:0 0 0 3px rgba(26,158,74,.1);
+}
+.issue-tile-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background:white;transition:background .18s;
+}
+.issue-tile:hover .issue-tile-icon,.issue-tile.selected .issue-tile-icon{background:rgba(26,158,74,.12)}
+
+/* Severity selector */
+.severity-row{display:flex;gap:8px}
+.severity-btn{
+  flex:1;padding:9px 6px;border-radius:8px;
+  border:1.5px solid var(--border);
+  background:var(--page-bg);
+  font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .18s;text-align:center;
+}
+.severity-btn.low.active{background:rgba(26,158,74,.1);border-color:var(--green);color:var(--green)}
+.severity-btn.medium.active{background:rgba(232,131,26,.1);border-color:var(--saffron);color:var(--saffron)}
+.severity-btn.high.active{background:rgba(217,119,6,.12);border-color:var(--amber);color:var(--amber)}
+.severity-btn.critical.active{background:rgba(229,62,62,.1);border-color:var(--red);color:var(--red)}
+
+/* Textarea */
+.textarea{
+  width:100%;padding:13px 15px;border-radius:10px;
+  border:1.5px solid var(--border);
+  background:var(--page-bg);
+  font-family:'Poppins',sans-serif;font-size:13px;
+  color:var(--navy);resize:vertical;min-height:100px;
+  outline:none;transition:border-color .18s,background .18s;
+  line-height:1.6;
+}
+.textarea:focus{border-color:var(--border-focus);background:white}
+.textarea::placeholder{color:var(--text-muted)}
+.char-count{font-size:11px;color:var(--text-muted);text-align:right;margin-top:4px}
+
+/* Photo upload */
+.photo-upload-zone{
+  border:2px dashed var(--border);border-radius:12px;
+  padding:20px;background:var(--page-bg);
+  cursor:pointer;transition:all .2s;text-align:center;
+  position:relative;
+}
+.photo-upload-zone:hover,.photo-upload-zone.dragover{
+  border-color:var(--green);background:var(--green-bg);
+}
+.photo-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-upload-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:white;display:flex;align-items:center;justify-content:center;
+  margin:0 auto 10px;box-shadow:var(--shadow-sm);
+}
+.photo-upload-zone p{font-size:13px;font-weight:600;color:var(--navy)}
+.photo-upload-zone span{font-size:11px;color:var(--text-muted)}
+
+.photo-options-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;
+}
+.photo-camera-zone{
+  border:2px dashed var(--border);border-radius:12px;
+  padding:20px;background:var(--page-bg);
+  cursor:pointer;transition:all .2s;text-align:center;
+  position:relative;
+}
+.photo-camera-zone:hover{
+  border-color:var(--green);background:var(--green-bg);
+}
+.photo-camera-zone p{font-size:13px;font-weight:600;color:var(--navy)}
+.photo-camera-zone span{font-size:11px;color:var(--text-muted)}
+
+.photo-previews{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.photo-thumb{
+  width:80px;height:80px;border-radius:10px;
+  position:relative;overflow:hidden;
+  border:1.5px solid var(--border);
+  background:var(--page-bg);
+  flex-shrink:0;
+}
+.photo-thumb img{width:100%;height:100%;object-fit:cover}
+.photo-thumb-remove{
+  position:absolute;top:4px;right:4px;
+  width:18px;height:18px;border-radius:50%;
+  background:rgba(11,31,58,.75);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+}
+.photo-thumb-remove:hover{background:var(--red)}
+.photo-thumb-progress{
+  position:absolute;bottom:0;left:0;right:0;
+  height:3px;background:rgba(255,255,255,.3);
+}
+.photo-thumb-bar{
+  height:100%;background:var(--green);border-radius:0 0 10px 10px;
+  transition:width .3s ease;
+}
+.photo-count-hint{font-size:11px;color:var(--text-muted);margin-top:8px}
+
+/* Camera modal */
+.camera-modal{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.95);display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.camera-modal.active{display:flex}
+.camera-container{width:100%;max-width:100%;display:flex;flex-direction:column;align-items:center;gap:16px}
+.camera-video{width:100%;max-width:600px;aspect-ratio:3/4;background:black;border-radius:12px;object-fit:cover}
+.camera-controls{display:flex;gap:12px;justify-content:center;align-items:center}
+.camera-btn{padding:14px 24px;border-radius:10px;border:none;font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:8px}
+.camera-capture-btn{background:var(--green);color:white;box-shadow:0 4px 14px rgba(26,158,74,.25)}
+.camera-capture-btn:hover{background:var(--green-dark)}
+.camera-close-btn{background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.2)}
+.camera-close-btn:hover{background:rgba(255,255,255,.15)}
+.camera-status{color:white;font-size:13px;text-align:center;min-height:20px}
+
+/* Form footer */
+.form-footer{
+  padding:20px 0 28px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.btn-row{display:flex;gap:10px}
+.btn-next{
+  flex:1;padding:14px;border-radius:10px;
+  background:var(--green);border:none;
+  color:white;font-family:'Poppins',sans-serif;
+  font-size:15px;font-weight:700;cursor:pointer;
+  transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 14px rgba(26,158,74,.25);
+}
+.btn-next:hover{background:var(--green-dark);transform:translateY(-1px)}
+.btn-next:disabled{opacity:.55;pointer-events:none;transform:none}
+.btn-back-sm{
+  padding:14px 20px;border-radius:10px;
+  background:transparent;border:1.5px solid var(--border);
+  color:var(--text-muted);font-family:'Poppins',sans-serif;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;
+}
+.btn-back-sm:hover{border-color:var(--navy);color:var(--navy)}
+
+/* Responsive */
+@media(max-width:640px){
+  .container{padding:90px 16px 32px}
+  .issue-grid{grid-template-columns:repeat(2,1fr)}
+  .photo-options-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="tsim-homepage-light.html" class="nav-logo">
+    <svg viewBox="0 0 38 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="pc2"><path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z"/></clipPath></defs>
+      <path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z" fill="#E8831A"/>
+      <rect x="0" y="0" width="38" height="14.6" fill="#E8831A" clip-path="url(#pc2)"/>
+      <rect x="0" y="14.6" width="38" height="14.6" fill="#F5F5F0" clip-path="url(#pc2)"/>
+      <rect x="0" y="29.3" width="38" height="15" fill="#1A9E4A" clip-path="url(#pc2)"/>
+      <circle cx="19" cy="19" r="5.5" fill="none" stroke="#0B1F3A" stroke-width="1.5"/>
+      <circle cx="19" cy="19" r="1.5" fill="#0B1F3A"/>
+    </svg>
+    <span class="nav-brand">Spoilt Indian Map</span>
+  </a>
+
+  <div class="nav-step-pill">
+    <div class="step-pill-item done" id="pill-1">① Pin Location</div>
+    <div class="step-pill-item active" id="pill-2">② Issue Details</div>
+    <div class="step-pill-item" id="pill-3">③ Review & Submit</div>
+  </div>
+
+  <a href="tsim-homepage-light.html" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M10 12L6 8l4-4" stroke="#8A97AA" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+  <div class="form-header">
+    <div class="form-header-tag">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+        <circle cx="5" cy="5" r="4" stroke="#1A9E4A" stroke-width="1.2"/>
+        <circle cx="5" cy="5" r="1.5" fill="#1A9E4A"/>
+      </svg>
+      New Complaint
+    </div>
+    <h2>Issue Details</h2>
+    <p>Select the type of issue, describe the problem, and optionally upload photos as evidence.</p>
+  </div>
+
+  <div class="form-body">
+
+    <div class="field">
+      <div class="field-label">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5v10M1.5 6.5h10" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Issue Type <span class="req">*</span>
+      </div>
+      <div class="issue-grid">
+        <div class="issue-tile" data-type="pothole" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#1A9E4A" stroke-width="1.3" fill="none"/><path d="M5 9h8M9 5v8" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <span>Pothole</span>
+        </div>
+        <div class="issue-tile" data-type="garbage" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="5" width="12" height="11" rx="1.5" stroke="#1A9E4A" stroke-width="1.3"/><path d="M6 5V3.5A1.5 1.5 0 017.5 2h3A1.5 1.5 0 0112 3.5V5" stroke="#1A9E4A" stroke-width="1.3"/><path d="M3 8h12" stroke="#1A9E4A" stroke-width="1.3"/></svg>
+          </div>
+          <span>Garbage</span>
+        </div>
+        <div class="issue-tile" data-type="drainage" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M5 5v8M13 5v8M5 13h8" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/><circle cx="9" cy="9" r="2" stroke="#1A9E4A" stroke-width="1.3" fill="none"/></svg>
+          </div>
+          <span>Drainage</span>
+        </div>
+        <div class="issue-tile" data-type="streetlight" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2v4M9 6a3 3 0 110 6 3 3 0 010-6zM9 12v4" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/><path d="M6 18h6" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <span>Street Light</span>
+        </div>
+        <div class="issue-tile" data-type="road" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M6 2v14M12 2v14" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/><path d="M6 6h6M6 10h6M6 14h6" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <span>Road Damage</span>
+        </div>
+        <div class="issue-tile" data-type="water" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C9 2 5 7 5 10.5A4 4 0 0013 10.5C13 7 9 2 9 2z" stroke="#1A9E4A" stroke-width="1.3" fill="none"/></svg>
+          </div>
+          <span>Water Logging</span>
+        </div>
+        <div class="issue-tile" data-type="encroachment" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="6" width="12" height="10" rx="1" stroke="#1A9E4A" stroke-width="1.3"/><path d="M6 6V4a3 3 0 016 0v2" stroke="#1A9E4A" stroke-width="1.3"/></svg>
+          </div>
+          <span>Encroachment</span>
+        </div>
+        <div class="issue-tile" data-type="other" onclick="selectIssue(this)">
+          <div class="issue-tile-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#1A9E4A" stroke-width="1.3" fill="none"/><path d="M9 6v4M9 12v.5" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <span>Other</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Severity <span class="req">*</span></div>
+      <div class="severity-row">
+        <div class="severity-btn low" onclick="selectSeverity(this,'low')">Low</div>
+        <div class="severity-btn medium" onclick="selectSeverity(this,'medium')">Medium</div>
+        <div class="severity-btn high active" onclick="selectSeverity(this,'high')">High</div>
+        <div class="severity-btn critical" onclick="selectSeverity(this,'critical')">Critical</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Description <span class="req">*</span></div>
+      <textarea class="textarea" id="description" placeholder="Describe the issue in detail — how long has it been there, how many people are affected, any safety risks…" maxlength="500" oninput="updateCharCount()"></textarea>
+      <div class="char-count"><span id="char-count">0</span>/500</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="2" width="11" height="9" rx="1.5" stroke="#1A9E4A" stroke-width="1.3"/><circle cx="4.5" cy="5.5" r="1.3" stroke="#1A9E4A" stroke-width="1.1"/><path d="M1 9l2.5-2.5L5 8l3-3.5L12 9" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Photo Evidence <span class="req">*</span>
+      </div>
+      <p class="field-hint">Upload 1-3 photos, max 5MB each. At least 1 photo is required.</p>
+
+      <div class="photo-options-row">
+        <div class="photo-upload-zone" id="photo-zone">
+          <input type="file" id="photo-input" accept="image/*" multiple onchange="handlePhotos(event)">
+          <div class="photo-upload-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="1" y="3" width="16" height="12" rx="2" stroke="#1A9E4A" stroke-width="1.4"/>
+              <circle cx="6" cy="7.5" r="1.8" stroke="#1A9E4A" stroke-width="1.2"/>
+              <path d="M1 13l4-4 2.5 2.5L11 7l6 6" stroke="#1A9E4A" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p>Click to upload photos</p>
+          <span>PNG, JPG up to 5MB</span>
+        </div>
+
+        <div class="photo-camera-zone" onclick="openCameraModal()">
+          <div class="photo-upload-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="#1A9E4A" stroke-width="1.4"/>
+              <circle cx="9" cy="9" r="4.5" stroke="#1A9E4A" stroke-width="1.4" fill="none"/>
+              <circle cx="13.5" cy="5.5" r="1.2" fill="#1A9E4A"/>
+            </svg>
+          </div>
+          <p>Take a photo</p>
+          <span>Use device camera</span>
+        </div>
+      </div>
+      <div class="photo-previews" id="photo-previews"></div>
+      <div class="photo-count-hint" id="photo-count-hint" style="display:none"></div>
+    </div>
+
+  </div>
+
+  <div class="form-footer">
+    <div class="btn-row">
+      <button class="btn-back-sm" onclick="goToStep1()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="goToStep3()" disabled>
+        Review Complaint
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- CAMERA MODAL -->
+<div class="camera-modal" id="camera-modal">
+  <div class="camera-container">
+    <video class="camera-video" id="camera-video" playsinline></video>
+    <div class="camera-status" id="camera-status"></div>
+    <div class="camera-controls">
+      <button class="camera-btn camera-capture-btn" onclick="capturePhoto()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.4"/>
+          <circle cx="9" cy="9" r="4.5" stroke="white" stroke-width="1.4" fill="none"/>
+          <circle cx="13.5" cy="5.5" r="1.2" fill="white"/>
+        </svg>
+        Capture
+      </button>
+      <button class="camera-btn camera-close-btn" onclick="closeCameraModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedIssue = '';
+let selectedSeverity = 'high';
+let description = '';
+let photos = [];
+let cameraStream = null;
+
+// =======================
+// Navigation
+// =======================
+function goToStep1() {
+  window.location.href = 'step1-location.html';
+}
+
+function goToStep3() {
+  storeDetailsData();
+  window.location.href = 'step3-review.html';
+}
+
+// =======================
+// Store Data
+// =======================
+function storeDetailsData() {
+  try {
+    const data = {
+      issue: selectedIssue,
+      severity: selectedSeverity,
+      description: description,
+      photos: photos
+    };
+
+    sessionStorage.setItem(
+      'complaintDetails',
+      JSON.stringify(data)
+    );
+  } catch (e) {
+    console.error('Storage error:', e);
+  }
+}
+
+// =======================
+// Issue Selection
+// =======================
+function selectIssue(el) {
+  document.querySelectorAll('.issue-tile')
+    .forEach(tile => tile.classList.remove('selected'));
+
+  el.classList.add('selected');
+
+  selectedIssue = el.dataset.type;
+
+  validateForm();
+}
+
+// =======================
+// Severity
+// =======================
+function selectSeverity(el, level) {
+  document.querySelectorAll('.severity-btn')
+    .forEach(btn => btn.classList.remove('active'));
+
+  el.classList.add('active');
+
+  selectedSeverity = level;
+}
+
+// =======================
+// Description
+// =======================
+function updateCharCount() {
+  const text = document.getElementById('description').value;
+
+  description = text;
+
+  document.getElementById('char-count').textContent =
+    text.length;
+
+  validateForm();
+}
+
+// =======================
+// Validation
+// =======================
+function validateForm() {
+  const valid =
+    selectedIssue !== '' &&
+    description.trim().length >= 10 &&
+    photos.length >= 1 &&
+    photos.length <= 3;
+
+  document.getElementById('btn-next').disabled = !valid;
+}
+
+// =======================
+// Add Photos
+// =======================
+function addPhotoFile(file) {
+
+  // max photo limit
+  if (photos.length >= 3) {
+    alert('Maximum 3 photos allowed');
+    return;
+  }
+
+  // file type validation
+  if (!file.type.startsWith('image/')) {
+    alert('Only image files are allowed');
+    return;
+  }
+
+  // size validation
+  if (file.size > 5 * 1024 * 1024) {
+    alert(`${file.name} exceeds 5MB`);
+    return;
+  }
+
+  const reader = new FileReader();
+
+  const id = Date.now() + Math.random();
+
+  reader.onload = function(e) {
+
+    photos.push({
+      id: id,
+      name: file.name,
+      dataUrl: e.target.result
+    });
+
+    renderPhotos();
+    validateForm();
+  };
+
+  reader.readAsDataURL(file);
+}
+
+// =======================
+// File Upload
+// =======================
+function handlePhotos(event) {
+
+  const files = Array.from(event.target.files || []);
+
+  files.forEach(file => {
+    addPhotoFile(file);
+  });
+
+  event.target.value = '';
+}
+
+// =======================
+// Remove Photo
+// =======================
+function removePhoto(id) {
+
+  photos = photos.filter(photo => photo.id !== id);
+
+  renderPhotos();
+  validateForm();
+}
+
+// =======================
+// Render Photos
+// =======================
+function renderPhotos() {
+
+  const previewContainer =
+    document.getElementById('photo-previews');
+
+  const hint =
+    document.getElementById('photo-count-hint');
+
+  previewContainer.innerHTML = '';
+
+  photos.forEach(photo => {
+
+    const div = document.createElement('div');
+
+    div.className = 'photo-thumb';
+
+    div.innerHTML = `
+      <img src="${photo.dataUrl}" alt="${photo.name}">
+
+      <button
+        class="photo-thumb-remove"
+        onclick="removePhoto(${photo.id})"
+      >
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+          <path
+            d="M1 1l6 6M7 1L1 7"
+            stroke="white"
+            stroke-width="1.3"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    `;
+
+    previewContainer.appendChild(div);
+  });
+
+  if (photos.length > 0) {
+
+    hint.style.display = 'block';
+
+    hint.textContent =
+      `${photos.length}/3 photo${photos.length > 1 ? 's' : ''} added`;
+
+  } else {
+
+    hint.style.display = 'none';
+  }
+}
+
+// =======================
+// Camera Open
+// =======================
+async function openCameraModal() {
+
+  const modal =
+    document.getElementById('camera-modal');
+
+  const video =
+    document.getElementById('camera-video');
+
+  const status =
+    document.getElementById('camera-status');
+
+  modal.classList.add('active');
+
+  status.textContent = 'Opening camera...';
+
+  try {
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: {
+            ideal: 'environment'
+          }
+        },
+        audio: false
+      });
+
+    video.srcObject = cameraStream;
+
+    await video.play();
+
+    status.textContent = '';
+
+  } catch (err) {
+
+    console.error(err);
+
+    status.textContent =
+      'Unable to access camera';
+
+    setTimeout(() => {
+      closeCameraModal();
+    }, 2000);
+  }
+}
+
+// =======================
+// Camera Close
+// =======================
+function closeCameraModal() {
+
+  if (cameraStream) {
+
+    cameraStream.getTracks()
+      .forEach(track => track.stop());
+
+    cameraStream = null;
+  }
+
+  const video =
+    document.getElementById('camera-video');
+
+  video.srcObject = null;
+
+  document.getElementById('camera-modal')
+    .classList.remove('active');
+}
+
+// =======================
+// Capture Photo
+// =======================
+function capturePhoto() {
+
+  const video =
+    document.getElementById('camera-video');
+
+  if (!video.videoWidth) {
+
+    document.getElementById('camera-status')
+      .textContent = 'Camera not ready';
+
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx = canvas.getContext('2d');
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  canvas.toBlob(blob => {
+
+    if (!blob) return;
+
+    const file = new File(
+      [blob],
+      `camera-${Date.now()}.jpg`,
+      {
+        type: 'image/jpeg'
+      }
+    );
+
+    addPhotoFile(file);
+
+    closeCameraModal();
+
+  }, 'image/jpeg', 0.95);
+}
+
+// =======================
+// Drag & Drop
+// =======================
+const zone =
+  document.getElementById('photo-zone');
+
+zone.addEventListener('dragover', e => {
+
+  e.preventDefault();
+
+  zone.classList.add('dragover');
+});
+
+zone.addEventListener('dragleave', () => {
+
+  zone.classList.remove('dragover');
+});
+
+zone.addEventListener('drop', e => {
+
+  e.preventDefault();
+
+  zone.classList.remove('dragover');
+
+  const files = Array.from(e.dataTransfer.files);
+
+  files.forEach(file => {
+    addPhotoFile(file);
+  });
+});
+
+// =======================
+// Restore Previous Data
+// =======================
+window.addEventListener('DOMContentLoaded', () => {
+
+  try {
+
+    const saved =
+      JSON.parse(
+        sessionStorage.getItem('complaintDetails')
+      );
+
+    if (!saved) return;
+
+    selectedIssue = saved.issue || '';
+    selectedSeverity = saved.severity || 'high';
+    description = saved.description || '';
+    photos = saved.photos || [];
+
+    // restore issue
+    if (selectedIssue) {
+
+      const issueEl =
+        document.querySelector(
+          `.issue-tile[data-type="${selectedIssue}"]`
+        );
+
+      if (issueEl) {
+        issueEl.classList.add('selected');
+      }
+    }
+
+    // restore severity
+    document.querySelectorAll('.severity-btn')
+      .forEach(btn => btn.classList.remove('active'));
+
+    const sevBtn =
+      document.querySelector(
+        `.severity-btn.${selectedSeverity}`
+      );
+
+    if (sevBtn) {
+      sevBtn.classList.add('active');
+    }
+
+    // restore description
+    const textarea =
+      document.getElementById('description');
+
+    textarea.value = description;
+
+    document.getElementById('char-count')
+      .textContent = description.length;
+
+    renderPhotos();
+    validateForm();
+
+  } catch (err) {
+
+    console.error('Restore failed', err);
+  }
+});
+</script>
+</body>
+</html>
