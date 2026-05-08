@@ -104,36 +104,53 @@
                     Continue with Facebook
                 </button>
 
-                
+                <div class="guest-divider"></div>
 
+                <button class="btn-guest" onclick="window.location.href='report.html'">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a7c36" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                    </svg>
+                    Continue as Guest
+                </button>
+                
                 <div class="card-footer">
-                    Don't have an account? <a href="#" onclick="activateSignup()">Sign up</a>
+
+
+
+                    <div class="card-footer">
+                        Don't have an account? <a href="#" onclick="activateSignup()">Sign up</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- SCRIPT -->
-    <script>
-        function switchTab(clickedTab) {
-            let tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            clickedTab.classList.add('active');
+        
 
-            const isSignup = clickedTab.innerText === "Sign Up";
 
-            document.getElementById("nameField").style.display = isSignup ? "block" : "none";
-            document.getElementById("confirmPasswordField").style.display = isSignup ? "block" : "none";
 
-            document.querySelector(".btn-primary").innerText =
-                isSignup ? "Create Account" : "Login";
-        }
+        <!-- SCRIPT -->
+        <script>
+            function switchTab(clickedTab) {
+                let tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => tab.classList.remove('active'));
+                clickedTab.classList.add('active');
 
-        function activateSignup() {
-            const tabs = document.querySelectorAll('.tab');
-            tabs[1].click();
-        }
-    </script>
+                const isSignup = clickedTab.innerText === "Sign Up";
+
+                document.getElementById("nameField").style.display = isSignup ? "block" : "none";
+                document.getElementById("confirmPasswordField").style.display = isSignup ? "block" : "none";
+
+                document.querySelector(".btn-primary").innerText =
+                    isSignup ? "Create Account" : "Login";
+            }
+
+            function activateSignup() {
+                const tabs = document.querySelectorAll('.tab');
+                tabs[1].click();
+            }
+        </script>
 
 </body>
 
