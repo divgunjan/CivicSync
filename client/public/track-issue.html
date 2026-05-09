@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Track Issue — The Spoilt Indian Map</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --navy:#0B1F3A;
+  --green:#1A9E4A;
+  --green-dark:#157A3A;
+  --green-bg:#EAF7EE;
+
+  --saffron:#E8831A;
+  --saffron-bg:#FEF3E8;
+
+  --page-bg:#EEF3FA;
+  --white:#FFFFFF;
+
+  --border:#DDE5F0;
+
+  --text-body:#4A5568;
+  --text-muted:#8A97AA;
+
+  --amber:#D97706;
+  --red:#E53E3E;
+
+  --shadow-sm:0 1px 4px rgba(11,31,58,0.07);
+  --shadow-md:0 4px 20px rgba(11,31,58,0.10);
+  --shadow-lg:0 8px 40px rgba(11,31,58,0.13);
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--page-bg);
+  color:var(--navy);
+}
+
+/* NAVBAR */
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+
+  height:66px;
+
+  background:rgba(238,243,250,0.97);
+
+  backdrop-filter:blur(14px);
+
+  border-bottom:1px solid var(--border);
+
+  padding:0 6%;
+
+  display:flex;
+  align-items:center;
+}
+
+.nav-logo{
+  position:absolute;
+  left:6%;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  text-decoration:none;
+}
+
+.nav-brand{
+  font-size:17px;
+  font-weight:700;
+  color:var(--navy);
+}
+
+.nav-links{
+  display:flex;
+  gap:28px;
+  list-style:none;
+
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.nav-links a{
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-muted);
+  text-decoration:none;
+  transition:color .18s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--navy);
+}
+
+.nav-links a.active{
+  font-weight:700;
+}
+
+/* HERO */
+
+.track-hero{
+  text-align:center;
+  padding:70px 24px 50px;
+}
+
+.track-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  background:var(--saffron-bg);
+
+  border:1px solid rgba(232,131,26,.22);
+
+  border-radius:100px;
+
+  padding:6px 16px;
+
+  font-size:12px;
+  font-weight:700;
+
+  color:var(--saffron);
+
+  margin-bottom:20px;
+}
+
+.track-hero h1{
+  font-size:clamp(34px,5vw,54px);
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:16px;
+}
+
+.track-hero h1 span{
+  color:var(--green);
+}
+
+.track-hero p{
+  max-width:650px;
+  margin:0 auto 32px;
+
+  color:var(--text-body);
+
+  line-height:1.8;
+  font-size:15px;
+}
+
+.track-search{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.track-search input{
+  width:430px;
+  max-width:100%;
+
+  padding:16px 18px;
+
+  border-radius:12px;
+  border:1.5px solid var(--border);
+
+  background:white;
+
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+
+  outline:none;
+
+  transition:border-color .18s;
+}
+
+.track-search input:focus{
+  border-color:var(--green);
+}
+
+.track-search button{
+  padding:16px 28px;
+
+  border:none;
+  border-radius:12px;
+
+  background:var(--green);
+
+  color:white;
+
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:background .18s;
+}
+
+.track-search button:hover{
+  background:var(--green-dark);
+}
+
+/* WRAPPER */
+
+.issue-wrapper{
+  max-width:1050px;
+  margin:0 auto 80px;
+
+  padding:0 24px;
+
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+/* CARD */
+
+.issue-main-card,
+.timeline-card{
+  background:white;
+
+  border-radius:20px;
+
+  border:1px solid var(--border);
+
+  padding:30px;
+
+  box-shadow:var(--shadow-md);
+}
+
+/* ISSUE HEADER */
+
+.issue-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+
+  gap:20px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:28px;
+}
+
+.issue-id{
+  font-size:12px;
+  font-weight:700;
+
+  color:var(--green);
+
+  margin-bottom:8px;
+}
+
+.issue-title{
+  font-size:34px;
+  font-weight:800;
+
+  line-height:1.2;
+
+  margin-bottom:10px;
+}
+
+.issue-location{
+  color:var(--text-muted);
+  font-size:14px;
+}
+
+/* STATUS */
+
+.status-badge{
+  padding:12px 20px;
+
+  border-radius:100px;
+
+  font-size:13px;
+  font-weight:700;
+
+  height:fit-content;
+}
+
+.status-progress{
+  background:rgba(217,119,6,.12);
+  color:var(--amber);
+
+  box-shadow:0 0 22px rgba(217,119,6,.25);
+}
+
+/* IMAGE GRID */
+
+.issue-images{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:14px;
+
+  margin-bottom:30px;
+}
+
+.issue-images img{
+  width:100%;
+  height:280px;
+
+  object-fit:cover;
+
+  border-radius:16px;
+}
+
+/* SECTIONS */
+
+.issue-section{
+  margin-bottom:30px;
+}
+
+.section-title{
+  font-size:19px;
+  font-weight:800;
+
+  margin-bottom:14px;
+}
+
+.issue-description{
+  color:var(--text-body);
+
+  line-height:1.9;
+
+  font-size:14px;
+}
+
+/* IMPACT SCORE */
+
+.impact-box{
+  background:var(--green-bg);
+
+  border-radius:18px;
+
+  padding:24px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:30px;
+}
+
+.impact-label{
+  font-size:13px;
+  font-weight:700;
+
+  color:var(--green);
+
+  margin-bottom:4px;
+}
+
+.impact-sub{
+  font-size:13px;
+  color:var(--text-body);
+}
+
+.impact-score{
+  font-size:52px;
+  font-weight:800;
+
+  color:var(--green);
+}
+
+/* DOWNLOAD */
+
+.download-btn{
+  width:100%;
+
+  padding:17px;
+
+  border:none;
+  border-radius:14px;
+
+  background:var(--navy);
+
+  color:white;
+
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+  font-weight:700;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  cursor:pointer;
+
+  transition:transform .18s;
+}
+
+.download-btn:hover{
+  transform:translateY(-1px);
+}
+
+/* TIMELINE */
+
+.timeline{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.timeline-item{
+  display:flex;
+  gap:16px;
+}
+
+.timeline-dot{
+  width:16px;
+  height:16px;
+
+  border-radius:50%;
+
+  margin-top:5px;
+
+  flex-shrink:0;
+}
+
+.timeline-item.done .timeline-dot{
+  background:var(--green);
+}
+
+.timeline-item.active .timeline-dot{
+  background:var(--amber);
+
+  box-shadow:0 0 18px rgba(217,119,6,.45);
+}
+
+.timeline-content strong{
+  display:block;
+
+  margin-bottom:4px;
+}
+
+.timeline-content span{
+  color:var(--text-muted);
+  font-size:13px;
+}
+
+/* LOG */
+
+.log-item{
+  padding:15px 18px;
+
+  border-radius:14px;
+
+  background:var(--page-bg);
+
+  margin-bottom:12px;
+
+  line-height:1.7;
+
+  color:var(--text-body);
+}
+
+/* AUTHORITY */
+.authority-timeline{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:26px;
+}
+
+.authority-item{
+  position:relative;
+  display:flex;
+  gap:18px;
+}
+
+.authority-line{
+  position:absolute;
+  left:8px;
+  top:22px;
+
+  width:2px;
+  height:calc(100% + 26px);
+
+  background:var(--border);
+}
+
+.authority-dot{
+  width:18px;
+  height:18px;
+
+  border-radius:50%;
+
+  margin-top:4px;
+
+  flex-shrink:0;
+
+  position:relative;
+  z-index:2;
+}
+
+.authority-dot.blue{
+  background:#2B6CB0;
+  box-shadow:0 0 14px rgba(43,108,176,.35);
+}
+
+.authority-dot.grey{
+  background:#A0AEC0;
+  box-shadow:0 0 12px rgba(160,174,192,.25);
+}
+
+.authority-dot.red{
+  background:#E53E3E;
+  box-shadow:0 0 14px rgba(229,62,62,.35);
+}
+
+.authority-content{
+  background:var(--page-bg);
+
+  border:1px solid var(--border);
+
+  border-radius:16px;
+
+  padding:18px 20px;
+
+  width:100%;
+}
+
+.authority-role{
+  font-size:11px;
+  font-weight:700;
+
+  text-transform:uppercase;
+  letter-spacing:.8px;
+
+  color:var(--green);
+
+  margin-bottom:6px;
+}
+
+.authority-name{
+  font-size:20px;
+  font-weight:800;
+
+  color:var(--navy);
+
+  margin-bottom:4px;
+}
+
+.authority-title{
+  font-size:14px;
+
+  color:var(--text-body);
+
+  margin-bottom:12px;
+
+  line-height:1.6;
+}
+
+.authority-contact{
+  font-size:13px;
+
+  color:var(--text-muted);
+
+  margin-bottom:5px;
+}
+
+.authority-contact strong{
+  color:var(--navy);
+}
+
+/* EMAIL ALERT */
+
+.email-box{
+  background:linear-gradient(
+    135deg,
+    rgba(26,158,74,.12),
+    rgba(26,158,74,.04)
+  );
+
+  border:1px solid rgba(26,158,74,.15);
+
+  border-radius:18px;
+
+  padding:24px;
+
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.email-icon{
+  width:52px;
+  height:52px;
+
+  border-radius:14px;
+
+  background:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:var(--shadow-sm);
+
+  flex-shrink:0;
+}
+
+.email-title{
+  font-size:15px;
+  font-weight:700;
+
+  margin-bottom:4px;
+}
+
+.email-sub{
+  font-size:13px;
+  color:var(--text-body);
+
+  line-height:1.7;
+}
+
+/* FOOTER */
+
+footer{
+  background:#07152A;
+
+  padding:40px 6%;
+
+  border-top:1px solid rgba(255,255,255,.05);
+}
+
+.footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+
+  display:flex;
+  justify-content:center;
+}
+
+.footer-copy{
+  font-size:12px;
+  color:rgba(255,255,255,.28);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:760px){
+
+  .issue-images{
+    grid-template-columns:1fr;
+  }
+
+  .impact-box{
+    flex-direction:column;
+    text-align:center;
+    gap:18px;
+  }
+
+  .issue-title{
+    font-size:28px;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+  <a href="tsim-homepage-light.html" class="nav-logo">
+
+    <svg width="36" height="36" viewBox="0 0 38 44" fill="none">
+
+      <defs>
+        <clipPath id="pc3">
+          <path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z"/>
+        </clipPath>
+      </defs>
+
+      <path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z" fill="#E8831A"/>
+
+      <rect x="0" y="0" width="38" height="14.6" fill="#E8831A" clip-path="url(#pc3)"/>
+
+      <rect x="0" y="14.6" width="38" height="14.6" fill="#F5F5F0" clip-path="url(#pc3)"/>
+
+      <rect x="0" y="29.3" width="38" height="15" fill="#1A9E4A" clip-path="url(#pc3)"/>
+
+      <circle cx="19" cy="19" r="5.5" fill="none" stroke="#0B1F3A" stroke-width="1.5"/>
+
+      <circle cx="19" cy="19" r="1.5" fill="#0B1F3A"/>
+
+    </svg>
+
+    <span class="nav-brand">
+      Spoilt Indian Map
+    </span>
+
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="dashboard.html">Home</a></li>
+    <li><a href="track-issue.html" class="active">Track Issue</a></li>
+    <li><a href="step1-details.html">Report Issue</a></li>
+    <li><a href="feedback.html">Feedback</a></li>
+  </ul>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="track-hero">
+
+  <div class="track-tag">
+    Live civic issue tracking
+  </div>
+
+  <h1>
+    Track Your
+    <span>Issue Status</span>
+  </h1>
+
+  <p>
+    Enter your complaint ID to view live status,
+    escalation history, authority actions and repair progress.
+  </p>
+
+  <div class="track-search">
+
+    <input
+      type="text"
+      id="track-id"
+      placeholder="Enter Complaint ID (e.g. TSIM-2026-00128)"
+    >
+
+    <button onclick="fetchIssue()">
+      Track Issue
+    </button>
+
+  </div>
+
+</section>
+
+<!-- CONTENT -->
+
+<div class="issue-wrapper">
+
+  <!-- MAIN CARD -->
+
+  <div class="issue-main-card">
+
+    <div class="issue-head">
+
+      <div>
+
+        <div class="issue-id">
+          TSIM-2026-00128
+        </div>
+
+        <h2 class="issue-title">
+          Massive pothole near Silk Board Junction
+        </h2>
+
+        <p class="issue-location">
+          Bengaluru, Karnataka · Ward 17
+        </p>
+
+      </div>
+
+      <div class="status-badge status-progress">
+        In Progress
+      </div>
+
+    </div>
+
+    <!-- IMAGES -->
+
+    <div class="issue-images">
+
+      <img src="https://tse3.mm.bing.net/th/id/OIP.GDksSFNoyaYJSCH7mPX3dgHaI8?rs=1&pid=ImgDetMain&o=7&rm=3">
+
+      <img src="https://www.morebikes.co.uk/wp-content/uploads/sites/46/2016/03/pothole.jpg">
+
+    </div>
+
+    <!-- DESCRIPTION -->
+
+    <div class="issue-section">
+
+      <div class="section-title">
+        Issue Description
+      </div>
+
+      <p class="issue-description">
+
+        A large pothole has formed near the signal causing severe
+        traffic congestion and safety risks during rainfall.
+
+        Multiple bike riders have slipped in this area over the
+        past week and citizens have reported worsening road conditions.
+
+      </p>
+
+    </div>
+
+    <!-- IMPACT SCORE -->
+
+    <div class="impact-box">
+
+      <div>
+
+        <div class="impact-label">
+          Impact Score
+        </div>
+
+        <div class="impact-sub">
+          Calculated using severity, traffic density and citizen reports
+        </div>
+
+      </div>
+
+      <div class="impact-score" id="impact-score">
+        0
+      </div>
+
+    </div>
+
+    <!-- DOWNLOAD -->
+
+    <button class="download-btn">
+
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+
+        <path
+          d="M9 2v9M5.5 8.5L9 12l3.5-3.5"
+          stroke="white"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+        <path
+          d="M3 15h12"
+          stroke="white"
+          stroke-width="1.7"
+          stroke-linecap="round"
+        />
+
+      </svg>
+
+      Download Complaint PDF
+
+    </button>
+
+  </div>
+
+  <!-- TIMELINE -->
+
+  <div class="timeline-card">
+
+    <div class="section-title">
+      Timeline
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item done">
+
+        <div class="timeline-dot"></div>
+
+        <div class="timeline-content">
+
+          <strong>
+            Issue Reported
+          </strong>
+
+          <span>
+            May 4 · 10:42 AM
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="timeline-item done">
+
+        <div class="timeline-dot"></div>
+
+        <div class="timeline-content">
+
+          <strong>
+            Assigned to BBMP Road Division
+          </strong>
+
+          <span>
+            May 5 · 2:20 PM
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="timeline-item active">
+
+        <div class="timeline-dot"></div>
+
+        <div class="timeline-content">
+
+          <strong>
+            Repair Work In Progress
+          </strong>
+
+          <span>
+            Estimated completion in 2 days
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ESCALATION -->
+
+<div class="timeline-card">
+
+  <div class="section-title">
+    Escalation Authority Pipeline
+  </div>
+
+  <div class="authority-timeline">
+
+    <!-- COMMISSIONER -->
+
+    <div class="authority-item">
+
+      <div class="authority-line"></div>
+
+      <div class="authority-dot blue"></div>
+
+      <div class="authority-content">
+
+        <div class="authority-role">
+          Corporation Commissioner
+        </div>
+
+        <div class="authority-name">
+          Ramesh K N, I.A.S.
+        </div>
+
+        <div class="authority-title">
+          Commissioner, South City Corporation
+        </div>
+
+        <div class="authority-contact">
+          <strong>Phone:</strong> 94825 09549
+        </div>
+
+        <div class="authority-contact">
+          <strong>Email:</strong> comm.south.gba@gmail.com
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- JOINT COMMISSIONER -->
+
+    <div class="authority-item">
+
+      <div class="authority-line"></div>
+
+      <div class="authority-dot grey"></div>
+
+      <div class="authority-content">
+
+        <div class="authority-role">
+          Joint Commissioner
+        </div>
+
+        <div class="authority-name">
+          Rachappa
+        </div>
+
+        <div class="authority-title">
+          Joint Commissioner, South Zone 2
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CHIEF ENGINEER -->
+
+    <div class="authority-item">
+
+      <div class="authority-dot red"></div>
+
+      <div class="authority-content">
+
+        <div class="authority-role">
+          Chief Engineer
+        </div>
+
+        <div class="authority-name">
+          K V Ravi
+        </div>
+
+        <div class="authority-title">
+          Chief Engineer, South Zone 2
+        </div>
+
+        <div class="authority-contact">
+          <strong>Phone:</strong> 94806 83818
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- EMAIL -->
+
+  <div class="timeline-card">
+
+    <div class="section-title">
+      Reporter Notifications
+    </div>
+
+    <div class="email-box">
+
+      <div class="email-icon">
+
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+
+          <rect
+            x="2"
+            y="4"
+            width="18"
+            height="14"
+            rx="2"
+
+            stroke="#1A9E4A"
+            stroke-width="1.7"
+          />
+
+          <path
+            d="M2 7l9 5 9-5"
+            stroke="#1A9E4A"
+            stroke-width="1.7"
+            stroke-linecap="round"
+          />
+
+        </svg>
+
+      </div>
+
+      <div>
+
+        <div class="email-title">
+          Email Notifications Enabled
+        </div>
+
+        <div class="email-sub">
+
+          The reporter will automatically receive
+          email updates whenever the issue status changes,
+          escalates or gets resolved.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div class="footer-inner">
+
+    <div class="footer-copy">
+      © 2026 The Spoilt Indian Map · Built for India
+    </div>
+
+  </div>
+
+</footer>
+
+<script>
+
+function animateImpactScore(){
+
+  const el = document.getElementById('impact-score');
+
+  let start = 0;
+
+  const end = 87;
+
+  const timer = setInterval(()=>{
+
+    start++;
+
+    el.textContent = start;
+
+    if(start >= end){
+      clearInterval(timer);
+    }
+
+  },18);
+
+}
+
+animateImpactScore();
+
+function fetchIssue(){
+
+  const id = document.getElementById('track-id').value;
+
+  if(!id.trim()){
+
+    alert('Please enter a complaint ID');
+
+    return;
+
+  }
+
+  alert(
+    'Backend API integration will fetch live issue data here.'
+  );
+
+}
+
+</script>
+
+</body>
+</html>
