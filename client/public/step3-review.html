@@ -279,16 +279,6 @@ nav{
           <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="1.5" width="12" height="12" rx="2" stroke="#8A97AA" stroke-width="1.3"/><path d="M4.5 5.5h6M4.5 7.5h6M4.5 9.5h3.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round"/></svg>
         </div>
         <div>
-          <div class="review-label">Severity</div>
-          <div class="review-value" id="rv-severity">—</div>
-        </div>
-      </div>
-
-      <div class="review-row">
-        <div class="review-icon" style="background:#EEF3FA">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="1.5" width="12" height="12" rx="2" stroke="#8A97AA" stroke-width="1.3"/><path d="M4.5 5.5h6M4.5 7.5h6M4.5 9.5h3.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round"/></svg>
-        </div>
-        <div>
           <div class="review-label">Description</div>
           <div class="review-value" id="rv-desc" style="font-weight:500;font-size:12px">—</div>
         </div>
@@ -408,7 +398,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('rv-location').textContent = locData.address || '—';
     document.getElementById('rv-issue').textContent = issueLabels[detData.issue] || '—';
-    document.getElementById('rv-severity').textContent = severityLabels[detData.severity] || '—';
+    
     document.getElementById('rv-desc').textContent = detData.description || '—';
     
     const photoCount = detData.photos ? detData.photos.length : 0;

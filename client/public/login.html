@@ -58,7 +58,7 @@
                     <div class="tab" onclick="switchTab(this)">Sign Up</div>
                 </div>
 
-                <form id="authForm">
+                <form id="authForm" onsubmit="handleLogin(event)">
 
                     <!-- NAME (SIGNUP ONLY) -->
                     <div class="input-group" id="nameField" style="display:none;">
@@ -106,7 +106,7 @@
 
                 <div class="guest-divider"></div>
 
-                <button class="btn-guest" onclick="window.location.href='report.html'">
+                <button class="btn-guest" onclick="window.location.href='dashboard.html'">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a7c36" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="8" r="4" />
@@ -132,25 +132,44 @@
 
         <!-- SCRIPT -->
         <script>
-            function switchTab(clickedTab) {
-                let tabs = document.querySelectorAll('.tab');
-                tabs.forEach(tab => tab.classList.remove('active'));
-                clickedTab.classList.add('active');
+    function switchTab(clickedTab) {
+        let tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        clickedTab.classList.add('active');
 
-                const isSignup = clickedTab.innerText === "Sign Up";
+        const isSignup = clickedTab.innerText === "Sign Up";
 
-                document.getElementById("nameField").style.display = isSignup ? "block" : "none";
-                document.getElementById("confirmPasswordField").style.display = isSignup ? "block" : "none";
+        document.getElementById("nameField").style.display =
+            isSignup ? "block" : "none";
 
-                document.querySelector(".btn-primary").innerText =
-                    isSignup ? "Create Account" : "Login";
-            }
+        document.getElementById("confirmPasswordField").style.display =
+            isSignup ? "block" : "none";
 
-            function activateSignup() {
-                const tabs = document.querySelectorAll('.tab');
-                tabs[1].click();
-            }
-        </script>
+        document.querySelector(".btn-primary").innerText =
+            isSignup ? "Create Account" : "Login";
+    }
+
+    function activateSignup() {
+        const tabs = document.querySelectorAll('.tab');
+        tabs[1].click();
+    }
+
+    // LOGIN REDIRECT
+    function handleLogin(event) {
+        event.preventDefault();
+
+        const activeTab =
+            document.querySelector(".tab.active").innerText;
+
+        // Only redirect on Login
+        if (activeTab === "Login") {
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Account created successfully!");
+            window.location.href = "dashboard.html";
+        }
+    }
+</script>
 
 </body>
 
