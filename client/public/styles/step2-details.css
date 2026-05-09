@@ -209,16 +209,6 @@ nav{
   box-shadow:0 4px 14px rgba(26,158,74,.25);
 }
 .btn-next:hover{background:var(--green-dark);transform:translateY(-1px)}
-.btn-next.valid{
-  background:var(--green);
-  box-shadow:0 0 20px rgba(26,158,74,0.4);
-  animation:pulse-highlight 2s infinite;
-}
-@keyframes pulse-highlight {
-  0% { box-shadow: 0 0 0 0 rgba(26,158,74, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(26,158,74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(26,158,74, 0); }
-}
 .btn-next:disabled{opacity:.55;pointer-events:none;transform:none}
 .btn-back-sm{
   padding:14px 20px;border-radius:10px;

@@ -88,13 +88,7 @@ function validateForm() {
     photos.length >= 1 &&
     photos.length <= 3;
 
-  const btn = document.getElementById('btn-next');
-  btn.disabled = !valid;
-  if (valid) {
-    btn.classList.add('valid');
-  } else {
-    btn.classList.remove('valid');
-  }
+  document.getElementById('btn-next').disabled = !valid;
 }
 
 // =======================
@@ -124,7 +118,7 @@ function addPhotoFile(file) {
 
   const id = Date.now() + Math.random();
 
-  reader.onload = function (e) {
+  reader.onload = function(e) {
 
     photos.push({
       id: id,
