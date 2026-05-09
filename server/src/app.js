@@ -12,14 +12,14 @@ app.use(cors());
 app.use(express.json());
 
 // DB connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("DB connected"))
   .catch(err => console.log("DB connection error:", err));
 
 // routes
 app.use("/report", reportRoutes);
 
-// serve uploads
+// serve uploads (REQUIRED for n8n to download the image)
 app.use("/uploads", express.static("uploads"));
 
 app.listen(5000, () => {

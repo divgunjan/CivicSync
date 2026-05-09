@@ -36,7 +36,3 @@
             window.location.href = "dashboard.html";
         }
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 6c90be8fc28ec660e6b9c4a8ec0455930c7ccf49

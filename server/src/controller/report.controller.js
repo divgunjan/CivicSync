@@ -1,17 +1,34 @@
 import Report from "../models/report.model.js";
 
 export const createReport = async (req, res) => {
+  console.log(req.file);
+  console.log(req.body);
+
   try {
-    console.log('Request body:', req.body);
-    const imageUrls = req.files ? req.files.map(file => file.path) : [];
+    if (!req.file) {
+      return res.status(400).json({ message: "Image is required" });
+    }
+
+    if (!req.body.type || !req.body.lat || !req.body.lng) {
+      return res.status(400).json({ message: "Invalid form data: missing required fields" });
+    }
 
     const report = new Report({
       type: req.body.type,
       lat: Number(req.body.lat),
       lng: Number(req.body.lng),
+      location: {
+        type: "Point",
+        coordinates: [Number(req.body.lng), Number(req.body.lat)]
+      },
+      city: req.body.city || "",
+      area: req.body.area || "",
+      address: req.body.address || "",
       description: req.body.description,
       status: req.body.status || "reported",
-      imageUrls: imageUrls
+      imageUrl: "uploads/" + req.file.filename,
+      authorityEmail: req.body.authorityEmail || "",
+      priority: req.body.priority || "unassigned"
     });
 
     await report.save();
@@ -19,8 +36,8 @@ export const createReport = async (req, res) => {
     console.log("Report created:", report);
     res.status(201).json(report);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
+    console.log("DB error:", err);
+    res.status(500).json({ message: "Database connection failure or server error", error: err.message });
   }
 };
 
@@ -37,6 +54,83 @@ export const getReports = async (req, res) => {
       success: false,
       error: err.message
     });
+  }
+};
+
+export const getReportsByBounds = async (req, res) => {
+  try {
+    const { swLat, swLng, neLat, neLng } = req.query;
+    if (!swLat || !swLng || !neLat || !neLng) {
+      return res.status(400).json({ message: "Missing bounds parameters" });
+    }
+
+    const reports = await Report.find({
+      location: {
+        $geoWithin: {
+          $box: [
+            [Number(swLng), Number(swLat)],
+            [Number(neLng), Number(neLat)]
+          ]
+        }
+      }
+    });
+
+    res.json({ success: true, reports });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const checkNearby = async (req, res) => {
+  try {
+    const { lat, lng, type } = req.query;
+    if (!lat || !lng) {
+      return res.status(400).json({ message: "Missing location parameters" });
+    }
+
+    const query = {
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [Number(lng), Number(lat)]
+          },
+          $maxDistance: 100 // 100 meters
+        }
+      }
+    };
+
+    if (type) {
+      query.type = type;
+    }
+
+    const nearbyReports = await Report.find(query).limit(5);
+
+    res.json({ success: true, reports: nearbyReports });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const upvoteReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await Report.findByIdAndUpdate(id, { $inc: { upvotes: 1 } }, { new: true });
+    if (!report) return res.status(404).json({ message: "Report not found" });
+    res.json({ success: true, report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const flagReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await Report.findByIdAndUpdate(id, { $inc: { flags: 1 } }, { new: true });
+    if (!report) return res.status(404).json({ message: "Report not found" });
+    res.json({ success: true, report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
 };
 

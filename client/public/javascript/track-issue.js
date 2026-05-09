@@ -1,9 +1,4 @@
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 6c90be8fc28ec660e6b9c4a8ec0455930c7ccf49
 function animateImpactScore(){
 
   const el = document.getElementById('impact-score');
@@ -45,8 +40,3 @@ function fetchIssue(){
   );
 
 }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 6c90be8fc28ec660e6b9c4a8ec0455930c7ccf49
