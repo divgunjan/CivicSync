@@ -81,7 +81,7 @@ async function fetchNearbyReports() {
   const ne = bounds.getNorthEast();
   
   try {
-    const res = await fetch(`http://localhost:5000/report/bounds?swLng=${sw.lng}&swLat=${sw.lat}&neLng=${ne.lng}&neLat=${ne.lat}`);
+    const res = await fetch(window.CONFIG.getEndpoint(`/report/bounds?swLng=${sw.lng}&swLat=${sw.lat}&neLng=${ne.lng}&neLat=${ne.lat}`));
     const data = await res.json();
     if (data.success) {
       renderReports(data.reports);
@@ -94,6 +94,11 @@ async function fetchNearbyReports() {
 // RENDER REPORTS
 let renderedReportIds = new Set();
 function renderReports(reports) {
+  const recentList = document.getElementById('recent-reports-list');
+  if (recentList && recentList.querySelector('.recent-loading')) {
+    recentList.innerHTML = '';
+  }
+
   reports.forEach(r => {
     if (renderedReportIds.has(r._id)) return;
     renderedReportIds.add(r._id);
@@ -114,7 +119,7 @@ function renderReports(reports) {
     const marker = L.marker([r.location.coordinates[1], r.location.coordinates[0]], { icon });
     
     const isAbsolute = r.imageUrl && r.imageUrl.startsWith('http');
-    const imgSrc = isAbsolute ? r.imageUrl : `http://localhost:5000/${r.imageUrl.replace(/\\/g, '/')}`;
+    const imgSrc = isAbsolute ? r.imageUrl : window.CONFIG.getEndpoint(r.imageUrl.replace(/\\/g, '/'));
     const imgHtml = r.imageUrl ? `<img src="${imgSrc}" alt="Report Image">` : '';
     
     marker.on('click', () => {
@@ -122,6 +127,24 @@ function renderReports(reports) {
     });
     
     markersCluster.addLayer(marker);
+
+    // Add to Recent List
+    if (recentList) {
+      const item = document.createElement('div');
+      item.className = 'recent-item';
+      item.innerHTML = `
+        ${r.imageUrl ? `<img src="${imgSrc}" class="recent-img">` : '<div class="recent-img" style="display:flex;align-items:center;justify-content:center;background:#f4f6f9;color:#8A97AA;font-size:10px">No Pic</div>'}
+        <div class="recent-info">
+          <div class="recent-type">${r.type}</div>
+          <div class="recent-addr">${r.address || r.area || 'Unknown Location'}</div>
+        </div>
+      `;
+      item.onclick = () => {
+        map.flyTo([r.location.coordinates[1], r.location.coordinates[0]], 16, { duration: 1 });
+        setTimeout(() => openSidebarDetails(r, imgHtml), 1100);
+      };
+      recentList.prepend(item);
+    }
   });
 }
 
@@ -131,6 +154,9 @@ window.openSidebarDetails = function(r, imgHtml) {
   const sidebar = document.getElementById('existing-report-view');
   sidebar.style.display = 'flex';
   
+  const daysSince = Math.floor((Date.now() - new Date(r.createdAt)) / 86400000);
+  const urgencyText = daysSince === 0 ? "Reported Today" : `${daysSince} Days Since Last Report`;
+
   sidebar.innerHTML = `
     <div class="form-header" style="margin-bottom: 20px;">
       <div class="form-header-tag" style="color:#0B1F3A; border-color:#0B1F3A; background:#f4f6f9;">
@@ -141,7 +167,13 @@ window.openSidebarDetails = function(r, imgHtml) {
         Reported Issue
       </div>
       <h2 style="text-transform: capitalize; margin-bottom: 4px;">${r.type}</h2>
-      <p style="color:#8A97AA; font-size:13px; margin:0;">Submitted on ${new Date(r.createdAt).toLocaleDateString()}</p>
+      <div style="display:flex; flex-direction:column;">
+        <p style="color:#8A97AA; font-size:13px; margin:0;">Submitted on ${new Date(r.createdAt).toLocaleDateString()}</p>
+        <div class="urgency-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/><path d="m9.05 14.81 1.41-1.41"/><path d="M14.05 14.81 15 15.75"/><path d="M12 2v2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 19.07-1.41-1.41"/><path d="M12 20v2"/><path d="m4.93 19.07 1.41-1.41"/><path d="M2 12h2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M12 12v.01"/></svg>
+          ${urgencyText}
+        </div>
+      </div>
     </div>
     
     <div style="flex:1; overflow-y:auto; padding-right:8px; padding-bottom: 20px;">
@@ -191,7 +223,7 @@ window.closeSidebarDetails = function() {
 
 window.upvoteReport = async function(id, fromSidebar = false) {
   try {
-    const res = await fetch(`http://localhost:5000/report/${id}/upvote`, { method: 'PATCH' });
+    const res = await fetch(window.CONFIG.getEndpoint(`/report/${id}/upvote`), { method: 'PATCH' });
     const data = await res.json();
     if (data.success) {
       if (fromSidebar) {
@@ -206,7 +238,7 @@ window.upvoteReport = async function(id, fromSidebar = false) {
 
 window.flagReport = async function(id) {
   try {
-    const res = await fetch(`http://localhost:5000/report/${id}/flag`, { method: 'PATCH' });
+    const res = await fetch(window.CONFIG.getEndpoint(`/report/${id}/flag`), { method: 'PATCH' });
     const data = await res.json();
     if (data.success) {
       alert('Issue has been flagged.');
@@ -217,7 +249,7 @@ window.flagReport = async function(id) {
 // DUPLICATE CHECK LOGIC
 async function handleMapClick(lat, lng) {
   try {
-    const res = await fetch(`http://localhost:5000/report/nearby?lng=${lng}&lat=${lat}`);
+    const res = await fetch(window.CONFIG.getEndpoint(`/report/nearby?lng=${lng}&lat=${lat}`));
     const data = await res.json();
     
     if (data.success && data.reports && data.reports.length > 0) {

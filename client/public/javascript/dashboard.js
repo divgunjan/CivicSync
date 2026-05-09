@@ -1,3 +1,31 @@
+// ── GLOBAL UTILITIES ──────────────────────────────────────────────
+window.handleUpvote = async function(reportId, btn) {
+  const userId = localStorage.getItem('tsim_user_email');
+  if (!userId) {
+    alert("Please login first to upvote issues!");
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const res = await fetch(window.CONFIG.getEndpoint(`/report/${reportId}/upvote`), {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      btn.innerHTML = `✓ ${data.report.upvotes}`;
+      btn.style.background = '#1FA84A';
+      btn.disabled = true;
+      // Also update the local data if needed
+    } else {
+      alert(data.message || "Upvote failed");
+    }
+  } catch (err) {
+    console.error("Upvote error:", err);
+  }
+};
 
 // ── DASHBOARD INITIALIZATION ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,8 +65,27 @@ document.addEventListener('DOMContentLoaded', () => {
     rotateTicker();
   }, 3200);
 
-  // ── NAV SCROLL ────────────────────────────────────────────────────
+  // ── NAV SCROLL & AUTH ─────────────────────────────────────────────
   const nav = document.querySelector('nav');
+  const authBtn = document.querySelector('.btn-outline');
+  const userEmail = localStorage.getItem('tsim_user_email');
+
+  if (userEmail) {
+    authBtn.textContent = 'Logout';
+    authBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('tsim_user_email');
+      localStorage.removeItem('tsim_user_logged_in');
+      window.location.reload();
+    });
+  } else {
+    authBtn.textContent = 'Login';
+    authBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = 'login.html';
+    });
+  }
+
   window.addEventListener('scroll', () => {
     nav.style.background = window.scrollY > 40 ? 'rgba(255,255,255,0.98)' : 'rgba(255,255,255,0.92)';
     nav.style.boxShadow = window.scrollY > 40 ? '0 4px 20px rgba(0,0,0,0.06)' : 'none';
@@ -124,103 +171,123 @@ document.addEventListener('DOMContentLoaded', () => {
             d3.select(this).attr('fill', 'url(#stateFill)');
             tooltip.classList.remove('visible');
           });
-
-        drawPins(svg, proj, tooltip);
       })
-      .catch(() => drawPins(svg, proj, tooltip));
+      .catch(() => {});
   }
 
-  function drawPins(svg, proj, tooltip) {
-    const delays = [0, 300, 600, 150, 450, 750, 200, 500, 350, 100];
+  // ── LIVE RANKING ──────────────────────────────────────────────────
+  async function updateLiveRanking() {
+    const rankingContainer = document.querySelector('.score-demo');
+    if (!rankingContainer) return;
 
-    cities.forEach((city, i) => {
-      const [px, py] = proj([city.lon, city.lat]);
-      const delay = delays[i % delays.length];
-      const labelW = city.name.length * 6.8 + 14;
+    try {
+      const res = await fetch(window.CONFIG.getEndpoint('/report'));
+      const data = await res.json();
+      if (!data.success || !data.reports) return;
 
-      const g = svg.append('g')
-        .attr('class', 'city-pin-group')
-        .attr('transform', `translate(${px},${py})`);
+      // Filter for reports that actually have data and sort by upvotes/newest
+      const topReports = data.reports
+        .sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0))
+        .slice(0, 3);
 
-      // Animated ring 1
-      g.append('circle')
-        .attr('r', city.r + 2)
-        .attr('fill', 'none')
-        .attr('stroke', city.color)
-        .attr('stroke-width', '1.5')
-        .attr('opacity', '0')
-        .style('animation', 'pingRingD3 2.4s ease-out infinite')
-        .style('animation-delay', delay + 'ms')
-        .style('transform-box', 'fill-box')
-        .style('transform-origin', 'center');
+      if (topReports.length === 0) return;
 
-      // Animated ring 2
-      g.append('circle')
-        .attr('r', city.r + 2)
-        .attr('fill', 'none')
-        .attr('stroke', city.color)
-        .attr('stroke-width', '1')
-        .attr('opacity', '0')
-        .style('animation', 'pingRingD3 2.4s ease-out infinite')
-        .style('animation-delay', (delay + 600) + 'ms')
-        .style('transform-box', 'fill-box')
-        .style('transform-origin', 'center');
-
-      // Core dot
-      const core = g.append('circle')
-        .attr('class', 'pin-core-circle')
-        .attr('r', city.r)
-        .attr('fill', city.color)
-        .attr('stroke', 'white')
-        .attr('stroke-width', '2.5');
-
-      // Label pill
-      const isTop = i % 2 === 0;
-      const lx = -labelW / 2;
-      const ly = isTop ? -(city.r + 27) : (city.r + 10);
+      // Keep the title
+      const title = rankingContainer.querySelector('.score-demo-title');
+      const footer = rankingContainer.querySelector('div[style*="background:rgba(31,168,74,0.06)"]');
       
-      g.append('rect')
-        .attr('class', 'pin-label-pill')
-        .attr('x', lx).attr('y', ly)
-        .attr('width', labelW).attr('height', 17)
-        .attr('rx', 8.5)
-        .attr('fill', 'white')
-        .attr('stroke', 'rgba(0,0,0,0.08)')
-        .attr('stroke-width', '0.8')
-        .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.05))');
+      rankingContainer.innerHTML = '';
+      if (title) rankingContainer.appendChild(title);
 
-      g.append('text')
-        .attr('class', 'pin-label-city')
-        .attr('x', 0).attr('y', ly + 11.5)
-        .attr('text-anchor', 'middle')
-        .attr('font-family', "'Plus Jakarta Sans', sans-serif")
-        .attr('font-size', '9.5')
-        .attr('font-weight', '700')
-        .attr('fill', '#1a1a1a')
-        .text(city.name);
+      topReports.forEach(r => {
+        const score = r.impactScore || 0;
+        const priority = r.priority || 'low';
+        const color = priority === 'critical' ? '#ef4444' : priority === 'high' ? '#d97706' : '#E8831A';
+        const statusClass = `score-${priority}`;
+        const badgeText = priority.toUpperCase();
 
-      // Interactions
-      g.on('mouseenter', function (event) {
-        core.attr('r', city.r + 3.5);
-        tooltip.innerHTML = `
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;margin-bottom:3px">${city.name}</div>
-        <div style="font-size:11.5px;color:#64748b;margin-bottom:8px">${city.issue}</div>
-        <div style="display:flex;align-items:baseline;gap:6px">
-          <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:${city.color};line-height:1">${city.score}</span>
-          <span style="font-size:11px;color:#94a3b8">Impact Score</span>
-        </div>`;
-        tooltip.classList.add('visible');
-      })
-        .on('mousemove', ev => {
-          tooltip.style.left = (ev.clientX + 16) + 'px';
-          tooltip.style.top = (ev.clientY - 14) + 'px';
-        })
-        .on('mouseleave', function () {
-          core.attr('r', city.r);
-          tooltip.classList.remove('visible');
-        })
-        .on('click', () => rotateTicker(`${city.name}: ${city.issue} — Score ${city.score}`));
-    });
+        const card = document.createElement('div');
+        card.className = 'score-issue-card';
+        card.innerHTML = `
+          <div class="score-num ${statusClass}">${score}</div>
+          <div class="score-issue-info">
+            <div class="score-issue-type" style="text-transform: capitalize;">${r.type} — ${r.area || (r.address ? r.address.split(',')[0] : 'Local Area')}</div>
+            <div class="score-issue-city">${r.city || 'Local Area'} · ${Math.floor((Date.now() - new Date(r.createdAt)) / 86400000)} days unresolved</div>
+            <div class="score-bar-wrap" style="margin-top:8px">
+              <div class="score-bar" style="width:${Math.min(100, score)}%; background:${color};"></div>
+            </div>
+          </div>
+          <span class="status-badge badge-reported" style="align-self:flex-start">${badgeText}</span>
+        `;
+        rankingContainer.appendChild(card);
+      });
+
+      if (footer) rankingContainer.appendChild(footer);
+
+    } catch (err) {
+      console.error("Failed to update live ranking:", err);
+    }
   }
+
+  // ── UPDATE ANALYTICS ──────────────────────────────────────────────
+  async function updateAnalytics() {
+    try {
+      const res = await fetch(window.CONFIG.getEndpoint('/report'));
+      const data = await res.json();
+      if (!data.success || !data.reports) return;
+
+      const reports = data.reports;
+
+      // 1. Issue Types
+      const issueCounts = {};
+      reports.forEach(r => {
+        issueCounts[r.type] = (issueCounts[r.type] || 0) + 1;
+      });
+
+      const sortedIssues = Object.entries(issueCounts).sort((a, b) => b[1] - a[1]);
+      const maxCount = sortedIssues[0] ? sortedIssues[0][1] : 1;
+
+      const analyticsCard = document.querySelector('.analytics-card');
+      if (analyticsCard) {
+        const barRows = analyticsCard.querySelectorAll('.bar-row');
+        sortedIssues.slice(0, 6).forEach((issue, idx) => {
+          if (barRows[idx]) {
+            const [type, count] = issue;
+            const percentage = (count / maxCount) * 100;
+            barRows[idx].querySelector('.bar-label').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+            barRows[idx].querySelector('.bar-fill').style.width = `${percentage}%`;
+            barRows[idx].querySelector('.bar-count').textContent = count;
+          }
+        });
+      }
+
+      // 2. City Spotlight
+      const cityCounts = {};
+      reports.forEach(r => {
+        if (r.city) {
+          cityCounts[r.city] = (cityCounts[r.city] || 0) + 1;
+        }
+      });
+
+      const sortedCities = Object.entries(cityCounts).sort((a, b) => b[1] - a[1]);
+      const spotlightChips = document.querySelectorAll('.stat-chip');
+      
+      if (sortedCities[0] && spotlightChips[0]) {
+        spotlightChips[0].querySelector('.off-white').textContent = sortedCities[0][0];
+        spotlightChips[0].querySelector('.chip-val').textContent = sortedCities[0][1];
+      }
+
+      const resolvedCount = reports.filter(r => r.status === 'resolved' || r.status === 'fixed').length;
+      if (spotlightChips[1]) {
+        spotlightChips[1].querySelector('.chip-val').textContent = resolvedCount;
+      }
+
+    } catch (err) {
+      console.error("Analytics update failed:", err);
+    }
+  }
+
+  updateLiveRanking();
+  updateAnalytics();
 });
 

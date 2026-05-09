@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import Report from "./src/models/report.model.js";
+import { calculateImpactScore } from "./src/utils/impactScore.js";
 
 dotenv.config();
 
@@ -77,8 +78,16 @@ const generateFakeReports = async () => {
       }
     }
 
-    await Report.insertMany(fakeData);
-    console.log(`Successfully seeded ${fakeData.length} fake reports with images across multiple cities!`);
+    console.log("Processing impact scores for seeded data...");
+    for (let data of fakeData) {
+      const impact = await calculateImpactScore(data, Report);
+      data.impactScore = impact.finalScore;
+      data.impactScoreBreakdown = impact.breakdown;
+      data.priority = impact.priority;
+      await Report.create(data);
+    }
+    
+    console.log(`Successfully seeded ${fakeData.length} fake reports with dynamic impact scores!`);
     
     process.exit(0);
   } catch (err) {

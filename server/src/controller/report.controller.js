@@ -1,4 +1,6 @@
 import Report from "../models/report.model.js";
+import { sendReportEmail } from "../services/email.service.js";
+import { calculateImpactScore } from "../utils/impactScore.js";
 
 export const createReport = async (req, res) => {
   console.log(req.file);
@@ -26,12 +28,21 @@ export const createReport = async (req, res) => {
       address: req.body.address || "",
       description: req.body.description,
       status: req.body.status || "reported",
-      imageUrl: "uploads/" + req.file.filename,
+      imageUrl: req.file.path,
       authorityEmail: req.body.authorityEmail || "",
-      priority: req.body.priority || "unassigned"
+      priority: req.body.priority || "low"
     });
 
+    // Calculate initial Impact Score
+    const impactData = await calculateImpactScore(report, Report);
+    report.impactScore = impactData.finalScore;
+    report.impactScoreBreakdown = impactData.breakdown;
+    report.priority = impactData.priority;
+
     await report.save();
+
+    // Send email notification (Disabled due to sending limit)
+    // sendReportEmail(report).catch(err => console.error("Auto-email failed:", err));
 
     console.log("Report created:", report);
     res.status(201).json(report);
@@ -115,8 +126,31 @@ export const checkNearby = async (req, res) => {
 export const upvoteReport = async (req, res) => {
   try {
     const { id } = req.params;
-    const report = await Report.findByIdAndUpdate(id, { $inc: { upvotes: 1 } }, { new: true });
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User identification required" });
+    }
+
+    const report = await Report.findById(id);
     if (!report) return res.status(404).json({ message: "Report not found" });
+
+    // Check if user already upvoted
+    if (report.upvotedBy.includes(userId)) {
+      return res.status(400).json({ success: false, message: "Already upvoted" });
+    }
+
+    report.upvotes += 1;
+    report.upvotedBy.push(userId);
+
+    // Recalculate Impact Score after upvote
+    const impactData = await calculateImpactScore(report, Report);
+    report.impactScore = impactData.finalScore;
+    report.impactScoreBreakdown = impactData.breakdown;
+    report.priority = impactData.priority;
+
+    await report.save();
+
     res.json({ success: true, report });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

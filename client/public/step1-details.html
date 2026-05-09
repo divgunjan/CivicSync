@@ -39,6 +39,34 @@
 .dup-modal .btns button { flex: 1; padding: 10px; border-radius: 6px; border: none; font-family: 'Poppins'; font-weight: 500; cursor: pointer; }
 .dup-btn-upvote { background: #E8831A; color: white; }
 .dup-btn-continue { background: #F5F5F0; color: #0B1F3A; }
+
+/* Recent Reports Sidebar */
+.recent-reports-section { margin-top: 32px; border-top: 1px solid #eef2f7; padding-top: 24px; }
+.recent-header { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #0B1F3A; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+.recent-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; padding-right: 4px; }
+.recent-item { display: flex; align-items: center; gap: 12px; padding: 10px; background: #fcfcfd; border: 1px solid #f0f2f5; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+.recent-item:hover { border-color: #1A9E4A; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transform: translateY(-1px); }
+.recent-img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #eee; }
+.recent-info { flex: 1; min-width: 0; }
+.recent-type { font-size: 13px; font-weight: 600; color: #0B1F3A; text-transform: capitalize; margin-bottom: 2px; }
+.recent-addr { font-size: 11px; color: #8A97AA; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.recent-loading { font-size: 12px; color: #8A97AA; text-align: center; padding: 20px; }
+
+/* Urgency Animation */
+@keyframes urgencyBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.98); }
+}
+.urgency-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #dc3545;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 8px;
+  animation: urgencyBlink 1.2s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
@@ -138,6 +166,17 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>
       </div>
+
+      <!-- Recent Reports Sidebar -->
+      <div class="recent-reports-section">
+        <div class="recent-header">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#1A9E4A" stroke-width="1.5"/><path d="M8 5v3l2 1" stroke="#1A9E4A" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Recent Community Reports
+        </div>
+        <div id="recent-reports-list" class="recent-list">
+          <div class="recent-loading">Loading nearby issues...</div>
+        </div>
+      </div>
     </div>
 
     <div id="existing-report-view" style="display:none; flex-direction:column; gap:16px;">
@@ -205,7 +244,8 @@
   </div>
 </div>
 
-<script src="javascript/step1-details.js"></script>
+  <script src="javascript/config.js"></script>
+  <script src="javascript/step1-details.js"></script>
 
 </body>
 </html>

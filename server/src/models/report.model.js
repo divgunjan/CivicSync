@@ -24,9 +24,24 @@ const reportSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    upvotedBy: {
+      type: [String],
+      default: []
+    },
     flags: {
       type: Number,
       default: 0
+    },
+    impactScore: {
+      type: Number,
+      default: 0
+    },
+    impactScoreBreakdown: {
+      baseSeverity: { type: Number, default: 0 },
+      nearbyMultiplier: { type: Number, default: 0 },
+      upvotePoints: { type: Number, default: 0 },
+      timePoints: { type: Number, default: 0 },
+      zoneMultiplier: { type: Number, default: 1 }
     }
   },
   { timestamps: true }
