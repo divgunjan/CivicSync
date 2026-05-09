@@ -17,6 +17,29 @@ export const createReport = async (req, res) => {
     await report.save();
 
     console.log("Report created:", report);
+
+    const payload = {
+      issueType: report.type,
+      latitude: report.lat,
+      longitude: report.lng,
+      createdAt: report.createdAt ? new Date(report.createdAt).getTime() : Date.now(),
+      description: report.description,
+      status: report.status || "pending",
+      severityScore: 7
+    };
+
+    // Trigger n8n webhook asynchronously
+    fetch(
+      "https://civicsync.app.n8n.cloud/webhook/complaint-report", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(() => console.log("n8n webhook triggered successfully"))
+      .catch(webhookError => console.error("Error triggering n8n webhook:", webhookError));
+
     res.status(201).json(report);
   } catch (err) {
     console.log(err);
