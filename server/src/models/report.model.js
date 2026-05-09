@@ -6,7 +6,7 @@ const reportSchema = new mongoose.Schema(
     lat: Number,
     lng: Number,
     description: String,
-    imageUrl: String,
+    imageUrls: [String],
     status: String
   },
   { timestamps: true }

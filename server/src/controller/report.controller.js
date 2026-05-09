@@ -1,30 +1,38 @@
 import Report from "../models/report.model.js";
-import fs from "fs";
 
 export const createReport = async (req, res) => {
   try {
-    const { type, lat, lng, description } = req.body;
+    console.log('Request body:', req.body);
+    const imageUrls = req.files ? req.files.map(file => file.path) : [];
 
-    const imageUrl = req.file?.path;
-
-    const report = await Report.create({
-      type,
-      lat,
-      lng,
-      description,
-      imageUrl,
-      status: "reported"
+    const report = new Report({
+      type: req.body.type,
+      lat: Number(req.body.lat),
+      lng: Number(req.body.lng),
+      description: req.body.description,
+      status: req.body.status || "reported",
+      imageUrls: imageUrls
     });
 
+    await report.save();
+
     console.log("Report created:", report);
+    res.status(201).json(report);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getReports = async (req, res) => {
+  try {
+    const reports = await Report.find().sort({ createdAt: -1 });
 
     res.json({
       success: true,
-      id: report._id
+      reports
     });
-
   } catch (err) {
-    console.error(err);
     res.status(500).json({
       success: false,
       error: err.message
@@ -32,32 +40,32 @@ export const createReport = async (req, res) => {
   }
 };
 
-export const updateReportStatus = async(req, res) => {
-  try{
-    const {id} = req.params;
-    const {status}= req.body;
+export const updateReportStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
 
     const report = await Report.findByIdAndUpdate(
       id,
-      {status},
-      {new: true}
+      { status },
+      { new: true }
     );
 
-    if(!report){
+    if (!report) {
       return res.status(404).json({
-        success:false, 
-        message:"Not found"
+        success: false,
+        message: "Not found"
       });
     }
 
     res.json({
-      success:true,
+      success: true,
       report
     });
-    
-  } catch(err) {
+
+  } catch (err) {
     res.status(500).json({
-      success:false,
+      success: false,
       error: err.message
     });
   }
