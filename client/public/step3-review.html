@@ -1,180 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Review & Submit — Step 3 — Spoilt Indian Map</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles/step3-details.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review & Submit — Step 3 — Spoilt Indian Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/step3-details.css">
+  <!-- Professional PDF Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
+
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="dashboard.html" class="nav-logo">
-    <svg viewBox="0 0 38 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs><clipPath id="pc2"><path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z"/></clipPath></defs>
-      <path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z" fill="#E8831A"/>
-      <rect x="0" y="0" width="38" height="14.6" fill="#E8831A" clip-path="url(#pc2)"/>
-      <rect x="0" y="14.6" width="38" height="14.6" fill="#F5F5F0" clip-path="url(#pc2)"/>
-      <rect x="0" y="29.3" width="38" height="15" fill="#1A9E4A" clip-path="url(#pc2)"/>
-      <circle cx="19" cy="19" r="5.5" fill="none" stroke="#0B1F3A" stroke-width="1.5"/>
-      <circle cx="19" cy="19" r="1.5" fill="#0B1F3A"/>
-    </svg>
-    <span class="nav-brand">Spoilt Indian Map</span>
-  </a>
-
-  <div class="nav-step-pill">
-    <div class="step-pill-item done" id="pill-1">① Pin Location</div>
-    <div class="step-pill-item done" id="pill-2">② Issue Details</div>
-    <div class="step-pill-item active" id="pill-3">③ Review & Submit</div>
-  </div>
-
-  <a href="tsim-homepage-light.html" class="nav-back">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M10 12L6 8l4-4" stroke="#8A97AA" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-    Back to Home
-  </a>
-</nav>
-
-<!-- MAIN CONTAINER -->
-<div class="container">
-
-  <div class="form-header">
-    <div class="form-header-tag">
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-        <circle cx="5" cy="5" r="4" stroke="#1A9E4A" stroke-width="1.2"/>
-        <circle cx="5" cy="5" r="1.5" fill="#1A9E4A"/>
+  <!-- NAV -->
+  <nav>
+    <a href="dashboard.html" class="nav-logo">
+      <svg viewBox="0 0 38 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="pc2">
+            <path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z" />
+          </clipPath>
+        </defs>
+        <path d="M19 0C8.5 0 0 8.5 0 19C0 30.7 19 44 19 44S38 30.7 38 19C38 8.5 29.5 0 19 0Z" fill="#E8831A" />
+        <rect x="0" y="0" width="38" height="14.6" fill="#E8831A" clip-path="url(#pc2)" />
+        <rect x="0" y="14.6" width="38" height="14.6" fill="#F5F5F0" clip-path="url(#pc2)" />
+        <rect x="0" y="29.3" width="38" height="15" fill="#1A9E4A" clip-path="url(#pc2)" />
+        <circle cx="19" cy="19" r="5.5" fill="none" stroke="#0B1F3A" stroke-width="1.5" />
+        <circle cx="19" cy="19" r="1.5" fill="#0B1F3A" />
       </svg>
-      New Complaint
+      <span class="nav-brand">Spoilt Indian Map</span>
+    </a>
+
+    <div class="nav-step-pill">
+      <div class="step-pill-item done" id="pill-1">① Pin Location</div>
+      <div class="step-pill-item done" id="pill-2">② Issue Details</div>
+      <div class="step-pill-item active" id="pill-3">③ Review & Submit</div>
     </div>
-    <h2>Review & Submit</h2>
-    <p>Check your complaint details before we send it to the authorities.</p>
+
+    <a href="dashboard.html" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8l4-4" stroke="#8A97AA" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      Back to Home
+    </a>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+
+    <div class="form-header">
+      <div class="form-header-tag">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <circle cx="5" cy="5" r="4" stroke="#1A9E4A" stroke-width="1.2" />
+          <circle cx="5" cy="5" r="1.5" fill="#1A9E4A" />
+        </svg>
+        New Complaint
+      </div>
+      <h2>Review & Submit</h2>
+      <p>Check your complaint details before we send it to the authorities.</p>
+    </div>
+
+    <div class="form-body">
+
+      <div class="field">
+        <div class="field-label">Review Your Complaint</div>
+        <p class="field-hint">Please verify the details below before submitting.</p>
+      </div>
+
+      <div class="review-card" id="review-card">
+        <div class="review-row">
+          <div class="review-icon" style="background:var(--green-bg)">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <circle cx="7.5" cy="5.5" r="2.5" stroke="#1A9E4A" stroke-width="1.3" />
+              <path d="M7.5 15S2 10 2 5.5a5.5 5.5 0 0111 0C13 10 7.5 15 7.5 15z" stroke="#1A9E4A" stroke-width="1.3"
+                fill="none" />
+            </svg>
+          </div>
+          <div>
+            <div class="review-label">Location</div>
+            <div class="review-value" id="rv-location">—</div>
+          </div>
+        </div>
+
+        <div class="review-row">
+          <div class="review-icon" style="background:#EEF3FA">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <rect x="1.5" y="1.5" width="12" height="12" rx="2" stroke="#8A97AA" stroke-width="1.3" />
+              <path d="M4.5 5.5h6M4.5 7.5h6M4.5 9.5h3.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div>
+            <div class="review-label">Issue Type</div>
+            <div class="review-value" id="rv-issue">—</div>
+          </div>
+        </div>
+
+        <div class="review-row">
+          <div class="review-icon" style="background:#EEF3FA">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <rect x="1.5" y="1.5" width="12" height="12" rx="2" stroke="#8A97AA" stroke-width="1.3" />
+              <path d="M4.5 5.5h6M4.5 7.5h6M4.5 9.5h3.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div>
+            <div class="review-label">Description</div>
+            <div class="review-value" id="rv-desc" style="font-weight:500;font-size:12px">—</div>
+          </div>
+        </div>
+
+        <div class="review-row">
+          <div class="review-icon" style="background:#EEF3FA">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+              <rect x="1.5" y="2.5" width="12" height="10" rx="2" stroke="#8A97AA" stroke-width="1.3" />
+              <circle cx="5" cy="6" r="1.5" stroke="#8A97AA" stroke-width="1.1" />
+              <path d="M1.5 11l3-3L7 10.5l3-4 4 4.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div>
+            <div class="review-label">Photos</div>
+            <div class="review-value" id="rv-photos">None uploaded</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px">
+          <circle cx="8" cy="8" r="6.5" stroke="#1A9E4A" stroke-width="1.3" />
+          <path d="M8 5.5v4M8 11v.5" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round" />
+        </svg>
+        <p>
+          By submitting, a formal complaint email will be sent to the relevant municipal authority. You'll receive a
+          <strong>Complaint ID</strong> for tracking. Unresolved issues are auto-escalated after 7 days.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="form-footer">
+      <div class="btn-row">
+        <button class="btn-back-sm" onclick="goToStep2()">← Back</button>
+        <button class="btn-next" id="btn-next" onclick="submitForm()">
+          <div class="spinner"></div>
+          <span class="btn-label">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8l4 4 6-7" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            Submit Complaint
+          </span>
+        </button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="form-body">
-
-    <div class="field">
-      <div class="field-label">Review Your Complaint</div>
-      <p class="field-hint">Please verify the details below before submitting.</p>
+  <!-- SUCCESS OVERLAY -->
+  <div class="success-overlay" id="success-overlay">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M7 16l6 6 12-12" stroke="#1A9E4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
     </div>
+    <div class="success-complaint-id" id="success-id">SIM-2024-00143</div>
+    <div class="success-title">Complaint Submitted!</div>
+    <p class="success-sub">Your complaint has been logged and a formal email has been dispatched to the relevant
+      municipal authority. We'll notify you when there's an update.</p>
 
-    <div class="review-card" id="review-card">
-      <div class="review-row">
-        <div class="review-icon" style="background:var(--green-bg)">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="5.5" r="2.5" stroke="#1A9E4A" stroke-width="1.3"/><path d="M7.5 15S2 10 2 5.5a5.5 5.5 0 0111 0C13 10 7.5 15 7.5 15z" stroke="#1A9E4A" stroke-width="1.3" fill="none"/></svg>
-        </div>
-        <div>
-          <div class="review-label">Location</div>
-          <div class="review-value" id="rv-location">—</div>
-        </div>
-      </div>
-
-      <div class="review-row">
-        <div class="review-icon" style="background:#EEF3FA">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="1.5" width="12" height="12" rx="2" stroke="#8A97AA" stroke-width="1.3"/><path d="M4.5 5.5h6M4.5 7.5h6M4.5 9.5h3.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round"/></svg>
-        </div>
-        <div>
-          <div class="review-label">Issue Type</div>
-          <div class="review-value" id="rv-issue">—</div>
-        </div>
-      </div>
-
-      <div class="review-row">
-        <div class="review-icon" style="background:#EEF3FA">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="1.5" width="12" height="12" rx="2" stroke="#8A97AA" stroke-width="1.3"/><path d="M4.5 5.5h6M4.5 7.5h6M4.5 9.5h3.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round"/></svg>
-        </div>
-        <div>
-          <div class="review-label">Description</div>
-          <div class="review-value" id="rv-desc" style="font-weight:500;font-size:12px">—</div>
-        </div>
-      </div>
-
-      <div class="review-row">
-        <div class="review-icon" style="background:#EEF3FA">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="2.5" width="12" height="10" rx="2" stroke="#8A97AA" stroke-width="1.3"/><circle cx="5" cy="6" r="1.5" stroke="#8A97AA" stroke-width="1.1"/><path d="M1.5 11l3-3L7 10.5l3-4 4 4.5" stroke="#8A97AA" stroke-width="1.3" stroke-linecap="round"/></svg>
-        </div>
-        <div>
-          <div class="review-label">Photos</div>
-          <div class="review-value" id="rv-photos">None uploaded</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-box">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="8" cy="8" r="6.5" stroke="#1A9E4A" stroke-width="1.3"/><path d="M8 5.5v4M8 11v.5" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
-      <p>
-        By submitting, a formal complaint email will be sent to the relevant municipal authority. You'll receive a <strong>Complaint ID</strong> for tracking. Unresolved issues are auto-escalated after 7 days.
-      </p>
-    </div>
-
-  </div>
-
-  <div class="form-footer">
-    <div class="btn-row">
-      <button class="btn-back-sm" onclick="goToStep2()">← Back</button>
-      <button class="btn-next" id="btn-next" onclick="submitForm()">
-        <div class="spinner"></div>
-        <span class="btn-label">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-          Submit Complaint
-        </span>
+    <div class="success-actions">
+      <button class="btn-success-primary" onclick="downloadPDF()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12h8M8 2v8" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+          <path d="M5 7l3 3 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        Download PDF
+      </button>
+      <button class="btn-success-outline" onclick="window.location.href='dashboard.html'">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="#0B1F3A" stroke-width="1.5" />
+          <path d="M8 5v4l2.5 2" stroke="#0B1F3A" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        Go to Home
       </button>
     </div>
-  </div>
 
-</div>
+    <div class="success-info-cards">
+      <div class="sic">
+        <div class="sic-icon" style="background:var(--green-bg)">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="#1A9E4A" stroke-width="1.3" />
+            <path d="M1 5.5h12M4.5 5.5V3" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div><span>Email Sent</span><small>To municipal authority</small></div>
+      </div>
+      <div class="sic">
+        <div class="sic-icon" style="background:var(--saffron-bg)">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="5.5" stroke="#E8831A" stroke-width="1.3" />
+            <path d="M7 4v4l2 1.5" stroke="#E8831A" stroke-width="1.3" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div><span>Auto Follow-up</span><small>In 7 days if unresolved</small></div>
+      </div>
+      <div class="sic">
+        <div class="sic-icon" style="background:rgba(229,62,62,.08)">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1.5L8.5 6H13L9.5 8.5L11 13L7 10L3 13L4.5 8.5L1 6H5.5Z" stroke="#E53E3E" stroke-width="1.2"
+              fill="none" />
+          </svg>
+        </div>
+        <div><span id="success-score">Impact Score: —</span><small>Community voting</small></div>
+      </div>
+    </div>
 
-<!-- SUCCESS OVERLAY -->
-<div class="success-overlay" id="success-overlay">
-  <div class="success-icon">
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <path d="M7 16l6 6 12-12" stroke="#1A9E4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
-  <div class="success-complaint-id" id="success-id">SIM-2024-00143</div>
-  <div class="success-title">Complaint Submitted!</div>
-  <p class="success-sub">Your complaint has been logged successfully and added to our community map. You can now track its progress and impact score live.</p>
-
-  <div class="success-actions">
-    <button class="btn-success-primary" onclick="downloadPDF()">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 12h8M8 2v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M5 7l3 3 3-3" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Download PDF
+    <button onclick="reportAnother()"
+      style="margin-top:20px;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;transition:color .18s"
+      onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-muted)'">
+      + Report Another Issue
     </button>
-    <button class="btn-success-outline" onclick="window.location.href='dashboard.html'">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#0B1F3A" stroke-width="1.5"/><path d="M8 5v4l2.5 2" stroke="#0B1F3A" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Go to Home
-    </button>
   </div>
 
-  <div class="success-info-cards">
-    <div class="sic">
-      <div class="sic-icon" style="background:var(--green-bg)">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2.5" width="12" height="9" rx="1.5" stroke="#1A9E4A" stroke-width="1.3"/><path d="M1 5.5h12M4.5 5.5V3" stroke="#1A9E4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+  <!-- PDF TEMPLATE (OFF-SCREEN) -->
+  <div id="pdf-template"
+    style="position: absolute; left: -9999px; top: -9999px; width: 800px; padding: 50px; background: white; font-family: 'Poppins', sans-serif; color: #0B1F3A;">
+    <style>
+      .pdf-header {
+        background: #1A9E4A;
+        padding: 40px;
+        border-radius: 12px 12px 0 0;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .pdf-header h1 {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        line-height: 1;
+      }
+
+      .pdf-header p {
+        font-size: 15px;
+        opacity: 0.85;
+        margin: 8px 0 0 0;
+        font-weight: 500;
+      }
+
+      .pdf-complaint-box {
+        background: #fdfdfd;
+        padding: 18px 28px;
+        border-radius: 14px;
+        text-align: left;
+        min-width: 220px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .pdf-complaint-box small {
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .pdf-complaint-box span {
+        font-size: 20px;
+        font-weight: 800;
+        color: #0B1F3A;
+        font-family: monospace;
+      }
+
+      .pdf-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 40px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+      }
+
+      .pdf-table th {
+        background: #1A9E4A;
+        color: white;
+        text-align: left;
+        padding: 16px 24px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .pdf-table td {
+        padding: 16px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 15px;
+        color: #4A5568;
+      }
+
+      .pdf-table tr:nth-child(even) {
+        background: #f8fafc;
+      }
+
+      .pdf-table td.label {
+        font-weight: 700;
+        width: 35%;
+        color: #2D3748;
+        background: #fcfcfd;
+      }
+
+      .pdf-section {
+        margin-top: 45px;
+      }
+
+      .pdf-section h3 {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1A9E4A;
+        margin-bottom: 15px;
+        border-left: 5px solid #1A9E4A;
+        padding-left: 15px;
+      }
+
+      .pdf-section p {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #4A5568;
+        margin: 0;
+        background: #f9fafb;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #f1f5f9;
+      }
+
+      .pdf-photo-wrapper {
+        margin-top: 15px;
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .pdf-photo {
+        width: 100%;
+        max-height: 450px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+      }
+
+      .pdf-photo-hint {
+        font-size: 12px;
+        color: #8A97AA;
+        margin-top: 12px;
+        font-style: italic;
+        text-align: center;
+      }
+
+      .pdf-footer {
+        margin-top: 60px;
+        text-align: center;
+        border-top: 2px solid #f1f5f9;
+        padding-top: 30px;
+      }
+
+      .pdf-footer p {
+        font-size: 13px;
+        color: #94a3b8;
+        margin: 0;
+        letter-spacing: 0.3px;
+      }
+    </style>
+
+    <div class="pdf-header">
+      <div>
+        <h1>Civic Issue Report</h1>
+        <p>Spoilt Indian Map — Official Grievance Document</p>
       </div>
-      <div><span>Issue Logged</span><small>On community map</small></div>
+      <div class="pdf-complaint-box">
+        <small>Complaint ID</small>
+        <span id="pdf-id">SIM-2024-00000</span>
+      </div>
     </div>
-    <div class="sic">
-      <div class="sic-icon" style="background:var(--saffron-bg)">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#E8831A" stroke-width="1.3"/><path d="M7 4v4l2 1.5" stroke="#E8831A" stroke-width="1.3" stroke-linecap="round"/></svg>
-      </div>
-      <div><span>Auto Follow-up</span><small>In 7 days if unresolved</small></div>
+
+    <table class="pdf-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Information</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Issue Type</td>
+          <td id="pdf-issue">—</td>
+        </tr>
+        <tr>
+          <td class="label">Status</td>
+          <td style="color:#1A9E4A; font-weight:700;">REPORTED</td>
+        </tr>
+        <tr>
+          <td class="label">Date/Time</td>
+          <td id="pdf-date">—</td>
+        </tr>
+        <tr>
+          <td class="label">Authority Assigned</td>
+          <td id="pdf-authority">BBMP (comm@bbmp.gov.in)</td>
+        </tr>
+        <tr>
+          <td class="label">Location</td>
+          <td id="pdf-location">—</td>
+        </tr>
+        <tr>
+          <td class="label">Coordinates</td>
+          <td id="pdf-coords">—</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pdf-section">
+      <h3>Description of Issue</h3>
+      <p id="pdf-desc">—</p>
     </div>
-    <div class="sic">
-      <div class="sic-icon" style="background:rgba(229,62,62,.08)">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5L8.5 6H13L9.5 8.5L11 13L7 10L3 13L4.5 8.5L1 6H5.5Z" stroke="#E53E3E" stroke-width="1.2" fill="none"/></svg>
+
+    <div class="pdf-section">
+      <h3>Photo Evidence</h3>
+      <div class="pdf-photo-wrapper">
+        <div id="pdf-photo-container">
+          <!-- Main photo will be injected here -->
+        </div>
+        <p class="pdf-photo-hint">* Additional photos available in the online tracking portal.</p>
       </div>
-      <div><span id="success-score">Impact Score: —</span><small>Community voting</small></div>
+    </div>
+
+    <div class="pdf-footer">
+      <p>This is an automatically generated document. Digital signature verified.</p>
     </div>
   </div>
 
-  <button onclick="reportAnother()" style="margin-top:20px;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;transition:color .18s" onmouseover="this.style.color='var(--navy)'" onmouseout="this.style.color='var(--text-muted)'">
-    + Report Another Issue
-  </button>
-</div>
-
-<script src="javascript/config.js"></script>
-<script src="javascript/step3-details.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="javascript/step3-details.js"></script>
 </body>
+
 </html>

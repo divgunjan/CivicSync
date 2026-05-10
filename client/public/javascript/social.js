@@ -111,11 +111,23 @@ async function fetchAndRenderPosts(sortBy = 'recent') {
             renderSidebarReports(activePosts);
         } else {
             console.warn("No reports found from server, using fallback.");
-            renderSidebarReports([]); // Will trigger mock fallback
+            const fallbackReports = [
+                { _id: 'm1', user: 'civic_warrior', type: 'Pothole', city: 'Mumbai', description: 'Huge crater near Bandra station. Extremely dangerous for two-wheelers.', upvotes: 42, createdAt: new Date(), imageUrl: 'https://images.unsplash.com/photo-1599577180570-740356534963?auto=format&fit=crop&q=80&w=800' },
+                { _id: 'm2', user: 'nature_lover', type: 'Garbage', city: 'Bengaluru', description: 'Overflowing dumpsters near Yelahanka park. The smell is unbearable.', upvotes: 28, createdAt: new Date(), imageUrl: 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&q=80&w=800' },
+                { _id: 'm3', user: 'road_safety', type: 'Streetlight', city: 'Delhi', description: 'Streetlights not working on MG Road for the last 3 days. Safety concern.', upvotes: 15, createdAt: new Date(), imageUrl: 'https://images.unsplash.com/photo-1542385151-efd9000785a0?auto=format&fit=crop&q=80&w=800' }
+            ];
+            postDatabase = fallbackReports;
+            activePosts = [...postDatabase];
+            renderPosts(activePosts);
+            renderSidebarReports(activePosts);
         }
     } catch (err) {
         console.error("Fetch posts failed:", err);
-        renderSidebarReports([]); // Show something even on error
+        const errorFallback = [
+            { _id: 'e1', user: 'system', type: 'Offline', city: 'Local', description: 'Unable to connect to live feed. Showing cached community highlights.', upvotes: 0, createdAt: new Date() }
+        ];
+        renderPosts(errorFallback);
+        renderSidebarReports([]); 
     }
 }
 
@@ -228,7 +240,8 @@ function attachHandlers() {
             const userId = localStorage.getItem('tsim_user_email') || 'anonymous';
 
             try {
-                const res = await fetch(`http://localhost:5000/report/${id}/upvote`, {
+                const url = window.CONFIG.getEndpoint(`/report/${id}/upvote`);
+                const res = await fetch(url, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId })

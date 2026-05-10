@@ -1,4 +1,4 @@
-const postDatabase = [
+let postDatabase = [
     { id: 1, type: "Pothole", city: "Bengaluru", upvotes: 542, user: "TechieOnScooty", time: "2h ago", imageUrl: "javascript/images/bad_road.png", text: "Silk Board is not a road, it's a test of patience and suspension. My spine is screaming! 😭 Is there a subscription to fix this or what? #SiliconValleyProblems", feeling: "Frustrated 😡" },
     { id: 2, type: "Garbage", city: "Hyderabad", upvotes: 188, user: "BiryaniLover44", time: "5h ago", imageUrl: "javascript/images/garbage.png", text: "The dump near Charminar is growing faster than my career. The smell is literally heartbreaking. 🤢 Can we get some 'Swachh' in this 'Bharat' please?", feeling: "Heartbroken 💔" },
     { id: 3, type: "Street Light", city: "Pune", upvotes: 210, user: "PuneKaka", time: "1d ago", imageUrl: "javascript/images/lights.png", text: "Darkness in Kothrud lanes. Walking here at night is like playing a horror game. 🔦 Digital India needs lights on the street first, sirs!", feeling: "Worried 😟" },

@@ -148,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(INDIA_GEOJSON_URL)
       .then(r => { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
       .then(geo => {
+        // Render States
         svg.append('g')
           .selectAll('path')
           .data(geo.features)
@@ -159,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             d3.select(this).attr('fill', '#c2ddc9');
             const name = d.properties.NAME_1 || d.properties.ST_NM || d.properties.name || '';
             if (name) {
-              tooltip.innerHTML = `<span style="font-weight:700;font-family:'Syne',sans-serif;font-size:13px">${name}</span>`;
+              tooltip.innerHTML = `<span style="font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px">${name}</span>`;
               tooltip.classList.add('visible');
             }
           })
@@ -171,8 +172,50 @@ document.addEventListener('DOMContentLoaded', () => {
             d3.select(this).attr('fill', 'url(#stateFill)');
             tooltip.classList.remove('visible');
           });
+
+        // Render Pins
+        const pins = svg.append('g').attr('class', 'pins-layer');
+
+        cities.forEach(city => {
+          const [x, y] = proj([city.lon, city.lat]);
+          const group = pins.append('g')
+            .attr('class', 'city-pin-group')
+            .attr('transform', `translate(${x}, ${y})`)
+            .on('mouseover', (ev) => {
+              tooltip.innerHTML = `
+                <div style="font-weight:800; font-size:14px; color:#1a1a1a; margin-bottom:4px;">${city.name}</div>
+                <div style="font-size:12px; color:#ef4444; font-weight:700; margin-bottom:2px;">${city.issue}</div>
+                <div style="font-size:11px; color:#64748b;">Impact Score: <span style="color:#1FA84A; font-weight:800;">${city.score}</span></div>
+              `;
+              tooltip.classList.add('visible');
+            })
+            .on('mousemove', ev => {
+              tooltip.style.left = (ev.clientX + 15) + 'px';
+              tooltip.style.top = (ev.clientY - 15) + 'px';
+            })
+            .on('mouseleave', () => tooltip.classList.remove('visible'));
+
+          // Pulsing rings
+          group.append('circle')
+            .attr('class', 'pin-ring-outer')
+            .attr('r', 0)
+            .attr('fill', city.color)
+            .attr('opacity', 0.4);
+
+          group.append('circle')
+            .attr('class', 'pin-ring-inner')
+            .attr('r', 0)
+            .attr('fill', city.color)
+            .attr('opacity', 0.6);
+
+          // Core dot
+          group.append('circle')
+            .attr('class', 'pin-core-circle')
+            .attr('r', city.r || 6)
+            .attr('fill', city.color);
+        });
       })
-      .catch(() => { });
+      .catch(err => console.error("Map load error:", err));
   }
 
   // ── LIVE RANKING ──────────────────────────────────────────────────

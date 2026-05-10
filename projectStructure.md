@@ -1,81 +1,62 @@
-spoilt-indian-map/
+# CivicSync Project Structure
+
+This document outlines the directory structure for the **CivicSync (Spoilt Indian Map)** project.
+
+```text
+civicisync/
+├── client/                        # Frontend (Vanilla JS + HTML)
+│   └── public/                    # Web assets
+│       ├── dashboard.html         # User Dashboard
+│       ├── feedback.html          # Feedback page
+│       ├── index.html             # Landing page (Main entry)
+│       ├── login.html             # Authentication page
+│       ├── social.html            # Community feed
+│       ├── step1-details.html     # Pin Location flow
+│       ├── step2-details.html     # Issue Details flow
+│       ├── step3-review.html      # Review & Submit flow
+│       ├── track-issue.html       # Status tracking page
+│       ├── javascript/            # Frontend logic
+│       │   ├── config.js          # App configuration
+│       │   ├── dashboard.js       # Dashboard interactions
+│       │   ├── db.js              # Local storage / API helpers
+│       │   ├── login.js           # Auth logic
+│       │   ├── step1-details.js   # Leaflet map & Pinning logic
+│       │   ├── step2-details.js   # Form & Image capture logic
+│       │   └── step3-details.js   # PDF generation & Submission
+│       └── styles/                # CSS Stylesheets
+│           ├── dashboard.css
+│           ├── index.css
+│           ├── step1-details.css
+│           ├── step2-details.css
+│           └── step3-details.css
 │
-├── client/                        # Frontend (UI + Map)
-│   ├── public/
-│   │   └── index.html
-│   │
+├── server/                        # Backend (Node.js + Express)
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── Map/
-│   │   │   │   ├── Map.js
-│   │   │   │   └── mapUtils.js
-│   │   │   │
-│   │   │   ├── ReportForm/
-│   │   │   │   ├── ReportForm.js
-│   │   │   │   └── ImageUpload.js
-│   │   │   │
-│   │   │   └── Common/
-│   │   │       ├── Button.js
-│   │   │       └── Loader.js
-│   │   │
-│   │   ├── pages/
-│   │   │   └── Home.js
-│   │   │
-│   │   ├── services/
-│   │   │   └── api.js          # talks to backend
-│   │   │
-│   │   ├── styles/
-│   │   │   └── global.css
-│   │   │
-│   │   ├── utils/
-│   │   │   └── constants.js
-│   │   │
-│   │   └── App.js
-│   │
-│   └── package.json
-│
-├── server/                        # Backend (Core API) ← YOU
-│   ├── src/
-│   │   ├── routes/
-│   │   │   └── report.routes.js
-│   │   │
-│   │   ├── controllers/
+│   │   ├── app.js                 # Entry point & Express setup
+│   │   ├── config/                # Configuration (Database, etc.)
+│   │   ├── controller/            # Request handlers (Business logic)
 │   │   │   └── report.controller.js
-│   │   │
-│   │   ├── models/
-│   │   │   └── report.model.js
-│   │   │
-│   │   ├── services/
-│   │   │   ├── upload.service.js
-│   │   │   └── webhook.service.js
-│   │   │
-│   │   ├── middleware/
+│   │   ├── middelware/            # Middleware (Uploads, Auth)
 │   │   │   └── upload.middleware.js
-│   │   │
-│   │   ├── config/
-│   │   │   └── db.js
-│   │   │
-│   │   ├── utils/
-│   │   │   └── logger.js
-│   │   │
-│   │   └── app.js
-│   │
-│   ├── .env
-│   └── package.json
+│   │   ├── models/                # MongoDB/Mongoose schemas
+│   │   │   └── report.model.js
+│   │   ├── routes/                # API route definitions
+│   │   │   └── report.routes.js
+│   │   ├── services/              # External integrations
+│   │   │   └── upload.service.js
+│   │   └── utils/                 # Utility functions
+│   ├── .env                       # Environment variables
+│   ├── package.json               # Backend dependencies & scripts
+│   ├── seed.js                    # Database seeding script
+│   └── uploads/                   # Temporary local image storage
 │
-├── automation/                    # n8n workflows ← Person 4
-│   ├── workflows.json
-│   └── README.md
+├── automation/                    # n8n workflows
+│   └── workflows.json
 │
-├── shared/                        # Contract between backend + n8n
+├── shared/                        # Shared schemas/constants
 │   └── payloads/
-│       └── report.schema.json
 │
-├── docs/                          # Team reference (VERY IMPORTANT)
-│   ├── api-contract.md
-│   ├── db-schema.md
-│   ├── architecture.md
-│   └── setup.md
-│
-├── .gitignore
-├── README.md
+└── docs/                          # Project Documentation
+    ├── api-contract.md
+    └── architecture.md
+```

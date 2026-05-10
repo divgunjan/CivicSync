@@ -119,7 +119,7 @@ function renderReports(reports) {
     const marker = L.marker([r.location.coordinates[1], r.location.coordinates[0]], { icon });
     
     const isAbsolute = r.imageUrl && r.imageUrl.startsWith('http');
-    const imgSrc = isAbsolute ? r.imageUrl : window.CONFIG.getEndpoint(r.imageUrl.replace(/\\/g, '/'));
+    const imgSrc = r.imageUrl ? (isAbsolute ? r.imageUrl : window.CONFIG.getEndpoint(r.imageUrl.replace(/\\/g, '/'))) : '';
     const imgHtml = r.imageUrl ? `<img src="${imgSrc}" alt="Report Image">` : '';
     
     marker.on('click', () => {
@@ -152,6 +152,22 @@ function renderReports(reports) {
 window.openSidebarDetails = function(r, imgHtml) {
   document.getElementById('new-complaint-view').style.display = 'none';
   const sidebar = document.getElementById('existing-report-view');
+  
+  // Calculate urgency based on impact score
+  let urgencyText = 'Moderate Urgency';
+  let urgencyColor = '#D97706';
+  if (r.impactScore >= 80) {
+    urgencyText = 'Critical Urgency';
+    urgencyColor = '#dc3545';
+  } else if (r.impactScore >= 50) {
+    urgencyText = 'High Urgency';
+    urgencyColor = '#E8831A';
+  } else if (r.impactScore < 30) {
+    urgencyText = 'Low Urgency';
+    urgencyColor = '#8A97AA';
+  }
+
+  sidebar.style.display = 'flex';
   const currentUser = localStorage.getItem('tsim_user_email') || 'anonymous';
   const hasFlagged = r.flaggedBy && r.flaggedBy.includes(currentUser);
   const flagStyle = hasFlagged ? 'background:#8A97AA; cursor:not-allowed; opacity:0.7;' : 'background:#dc3545; cursor:pointer;';
@@ -170,7 +186,7 @@ window.openSidebarDetails = function(r, imgHtml) {
       <h2 style="text-transform: capitalize; margin-bottom: 4px;">${r.type}</h2>
       <div style="display:flex; flex-direction:column;">
         <p style="color:#8A97AA; font-size:13px; margin:0;">Submitted on ${new Date(r.createdAt).toLocaleDateString()}</p>
-        <div class="urgency-tag">
+        <div class="urgency-tag" style="color:${urgencyColor}">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/><path d="m9.05 14.81 1.41-1.41"/><path d="M14.05 14.81 15 15.75"/><path d="M12 2v2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 19.07-1.41-1.41"/><path d="M12 20v2"/><path d="m4.93 19.07 1.41-1.41"/><path d="M2 12h2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M12 12v.01"/></svg>
           ${urgencyText}
         </div>

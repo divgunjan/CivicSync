@@ -7,6 +7,8 @@
   <title>The Spoilt Indian Map — Spot it. Pin it. Fix it.</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/dashboard.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 </head>
 
 <body>
@@ -36,6 +38,7 @@
     </a>
 
     <ul class="nav-links">
+      <li><a href="social.html">Community Feed</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#how">How it Works</a></li>
       <li><a href="#impact">Impact Score</a></li>
@@ -107,146 +110,14 @@
 
       <!-- MAP VISUAL -->
       <div class="hero-right">
-        <div class="map-frame">
-          <div class="map-topbar">
-            <div class="map-dot" style="background:#ef4444"></div>
-            <div class="map-dot" style="background:#f59e0b"></div>
-            <div class="map-dot" style="background:#22c55e"></div>
-          </div>
+        <div class="india-map-wrapper">
+          <div class="map-glow-bg"></div>
+          <div id="india-d3-map"></div>
 
-          <div class="map-inner">
-            <!-- India SVG silhouette (simplified) -->
-            <svg class="india-map" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M70 10 L90 5 L120 8 L145 20 L160 35 L165 55 L155 75 L160 90 L150 110 L155 130 L145 155 L130 175 L120 195 L110 215 L100 235 L90 215 L80 190 L70 170 L60 150 L55 130 L60 110 L50 90 L45 70 L40 50 L50 30 Z"
-                fill="rgba(0,0,0,0.04)" stroke="rgba(0,0,0,0.1)" stroke-width="1" />
-            </svg>
-
-            <!-- Pins -->
-            <div class="map-pins-container">
-
-              <div class="map-pin pin-red" style="top:28%; left:38%; animation-delay:0.2s">
-                <div class="pin-tooltip">
-                  Pothole — Bengaluru
-                  <div><span class="impact-chip impact-critical">CRITICAL 92</span></div>
-                </div>
-                <div class="pin-circle">
-                  <div class="pin-icon">🕳</div>
-                </div>
-                <div class="pin-tail"></div>
-              </div>
-
-              <div class="map-pin pin-amber" style="top:22%; left:55%; animation-delay:0.4s">
-                <div class="pin-tooltip">
-                  Garbage — Hyderabad
-                  <div><span class="impact-chip impact-high">HIGH 74</span></div>
-                </div>
-                <div class="pin-circle">
-                  <div class="pin-icon">🗑</div>
-                </div>
-                <div class="pin-tail"></div>
-              </div>
-
-              <div class="map-pin pin-green" style="top:15%; left:25%; animation-delay:0.6s">
-                <div class="pin-tooltip">
-                  Waterlog — Mumbai ✓ Resolved
-                </div>
-                <div class="pin-circle">
-                  <div class="pin-icon">💧</div>
-                </div>
-                <div class="pin-tail"></div>
-              </div>
-
-              <div class="map-pin pin-amber" style="top:12%; left:62%; animation-delay:0.8s">
-                <div class="pin-tooltip">
-                  Road Damage — Nagpur
-                  <div><span class="impact-chip impact-medium">MED 45</span></div>
-                </div>
-                <div class="pin-circle">
-                  <div class="pin-icon">🛣</div>
-                </div>
-                <div class="pin-tail"></div>
-              </div>
-
-              <div class="map-pin pin-red" style="top:8%; left:45%; animation-delay:1s">
-                <div class="pin-tooltip">
-                  Fallen Tree — Delhi
-                  <div><span class="impact-chip impact-critical">CRITICAL 88</span></div>
-                </div>
-                <div class="pin-circle">
-                  <div class="pin-icon">🌲</div>
-                </div>
-                <div class="pin-tail"></div>
-              </div>
-
-            </div>
-
-            <!-- Sidebar -->
-            <div class="map-sidebar">
-              <div class="sidebar-title">Live Issues</div>
-
-              <div class="issue-row">
-                <div class="issue-dot" style="background:#ef4444; box-shadow:0 0 4px rgba(239,68,68,0.3)"></div>
-                <div class="issue-info">
-                  <div class="issue-type">Pothole</div>
-                  <div class="issue-city">Bengaluru</div>
-                </div>
-                <div class="issue-score">92</div>
-              </div>
-
-              <div class="issue-row">
-                <div class="issue-dot" style="background:#ef4444; box-shadow:0 0 4px rgba(239,68,68,0.3)"></div>
-                <div class="issue-info">
-                  <div class="issue-type">Fallen Tree</div>
-                  <div class="issue-city">Delhi</div>
-                </div>
-                <div class="issue-score">88</div>
-              </div>
-
-              <div class="issue-row">
-                <div class="issue-dot" style="background:#f59e0b"></div>
-                <div class="issue-info">
-                  <div class="issue-type">Garbage</div>
-                  <div class="issue-city">Hyderabad</div>
-                </div>
-                <div class="issue-score">74</div>
-              </div>
-
-              <div class="issue-row">
-                <div class="issue-dot" style="background:#E8831A"></div>
-                <div class="issue-info">
-                  <div class="issue-type">Road Damage</div>
-                  <div class="issue-city">Nagpur</div>
-                </div>
-                <div class="issue-score">45</div>
-              </div>
-
-              <div class="issue-row">
-                <div class="issue-dot" style="background:#1FA84A; box-shadow:0 0 4px rgba(31,168,74,0.3)"></div>
-                <div class="issue-info">
-                  <div class="issue-type">Waterlog</div>
-                  <div class="issue-city">Mumbai</div>
-                </div>
-                <div>
-                  <span class="status-badge badge-resolved">✓</span>
-                </div>
-              </div>
-
-              <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(0,0,0,0.06)">
-                <div
-                  style="font-size:10px; color:var(--muted); margin-bottom:8px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.8px; font-weight: 600;">
-                  By Status</div>
-                <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                  <span class="status-badge badge-reported">● 8,241</span>
-                </div>
-                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
-                  <span class="status-badge badge-progress">● 998</span>
-                </div>
-                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
-                  <span class="status-badge badge-resolved">✓ 3,241</span>
-                </div>
-              </div>
-            </div>
+          <!-- MAP TICKER -->
+          <div class="map-ticker">
+            <div class="ticker-dot"></div>
+            <span id="mapTicker">Live: Road Damage reported in Mumbai — Score 74</span>
           </div>
         </div>
       </div>
@@ -626,6 +497,7 @@
     </div>
   </footer>
 
+  <script src="javascript/config.js"></script>
   <script src="javascript/dashboard.js"></script>
 
 

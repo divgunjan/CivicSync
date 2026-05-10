@@ -210,20 +210,18 @@ h1 .accent-green { color:var(--green-light); }
 .city-pin-group:hover .pin-core-circle { r:10; }
 
 .pin-ring-outer {
-  fill: none;
   animation: pingOuterRing 2.4s ease-out infinite;
   transform-box: fill-box;
   transform-origin: center;
 }
 .pin-ring-inner {
-  fill: none;
   animation: pingOuterRing 2.4s ease-out infinite 0.5s;
   transform-box: fill-box;
   transform-origin: center;
 }
 @keyframes pingOuterRing {
-  0%   { r: 4; opacity: 0.7; }
-  100% { r: 22; opacity: 0; }
+  0%   { r: 4; opacity: 0.5; }
+  100% { r: 30; opacity: 0; }
 }
 
 .pin-core-circle {
