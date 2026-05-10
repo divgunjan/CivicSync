@@ -15,54 +15,54 @@
      box-sizing: border-box;
      font-family: var(--font-family);
  }
-.btn-guest {
-  display: flex;
- align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 13px 20px;
-  border: 1.5px solid #1a7c36;
-  border-radius: 12px;
-  background: #ebfff0;
-  color: #1a7c36;
-  font-size: 14.5px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.18s, transform 0.12s;
-  position: relative;
-}
 
-.btn-guest:hover {
-  background: #f0faf3;
-  transform: translateY(-1px);
-}
+ .btn-guest {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 10px;
+     width: 100%;
+     padding: 13px 20px;
+     border: 1.5px solid #1a7c36;
+     border-radius: 12px;
+     background: #ebfff0;
+     color: #1a7c36;
+     font-size: 14.5px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: background 0.18s, transform 0.12s;
+     position: relative;
+ }
 
-.btn-guest:active {
-  transform: scale(0.98);
-  background: #e0f5e8;
-}
+ .btn-guest:hover {
+     background: #f0faf3;
+     transform: translateY(-1px);
+ }
 
-.btn-guest .badge {
-  position: absolute;
-  right: 14px;
-  font-size: 10.5px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: #e6f5ea;
-  color: #1a6830;
-}
+ .btn-guest:active {
+     transform: scale(0.98);
+     background: #e0f5e8;
+ }
+
+ .btn-guest .badge {
+     position: absolute;
+     right: 14px;
+     font-size: 10.5px;
+     font-weight: 500;
+     padding: 2px 8px;
+     border-radius: 20px;
+     background: #e6f5ea;
+     color: #1a6830;
+ }
 
  body {
      background-color: var(--bg-color);
      background-image: url("background.png");
-     background-size: 50%;
-     background-position: 9% 70%;
+     background-size: 42%;
+     background-position: 5% 90%;
      background-attachment: fixed;
      min-height: 100vh;
      background-repeat: no-repeat;
-     
      color: var(--primary-dark);
  }
 
@@ -142,23 +142,23 @@
  }
 
  /* Features Bar */
-.features-bar {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 20px 30px;
-    display: flex;
-    justify-content: space-between;
+ .features-bar {
+     background: var(--white);
+     border-radius: 16px;
+     padding: 20px 30px;
+     display: flex;
+     justify-content: space-between;
 
-    margin-top: auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    max-width: 600px;
-    z-index: 2;
-}
+     margin-top: auto;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+     max-width: 600px;
+     z-index: 2;
+ }
 
  .feature-item {
      text-align: center;
      flex: 1;
-    
+
      border-right: 1px solid var(--border-light);
  }
 
@@ -372,88 +372,113 @@
 
  /* --- Mobile Responsive Bit --- */
 
-@media (max-width: 900px) {
-    /* 1. Adjust background for the map-view look */
-    body {
-        background-size: 70%;
-        background-position: 50% 20%;
-        background-attachment: scroll;
-    }
+ @media (max-width: 900px) {
 
-    /* 2. Stack the layout vertically */
-    .container {
-        flex-direction: column;
-    }
+     /* 1. Adjust background for the map-view look */
+     body {
+         background-size: 70%;
+         background-position: 50% 20%;
+         background-attachment: scroll;
+     }
 
-    /* 3. Reorder Hero Section (Top) */
-    .hero-section {
-        padding: 40px 20px;
-        align-items: center;
-        text-align: center;
-        order: 1;
-    }
+     /* 2. Stack the layout vertically */
+     .container {
+         flex-direction: column;
+     }
 
-    .logo { margin-bottom: 20px;}
-    .hero-text h1 { font-size: 1.2rem; }
-    .hero-text p { font-size: 0.95rem; }
+     /* 3. Reorder Hero Section (Top) */
+     .hero-section {
+         padding: 40px 20px;
+         align-items: center;
+         text-align: center;
+         order: 1;
+     }
 
-    .logo .logo-text h2{
-        font-size: 4rem;
-    }
+     .logo {
+         margin-bottom: 20px;
+     }
 
-   
+     .hero-text h1 {
+         font-size: 1.2rem;
+     }
 
-    /* Hide desktop features bar */
-    .features-bar.desktop-only { display: none; }
+     .hero-text p {
+         font-size: 0.95rem;
+     }
 
-    /* 4. Transform Form Section into a Bottom Sheet */
-    .form-section {
-        display: block;
-        width: 80%;
-        padding: 0;
-        margin-top: 40px;
-        margin-left: 50px;
-        order: 1000;
-    }
+     .logo .logo-text h2 {
+         font-size: 4rem;
+     }
 
-    .login-card {
-        border-radius: 30px; /* Creates the rounded 'sheet' look */
-        padding: 30px 20px;
-        box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
-        animation: slideUp 0.6s ease-out; /* Smooth entrance */
-    }
 
-    /* 5. Style the Bottom Navigation (Mobile Features) */
-    .features-mobile {
-        display: flex;
-        background: #f1f5f3; /* Light tinted background */
-        padding: 15px 10px;
-        margin-top: 0;
-        border-radius: 0;
-        max-width: 100%;
-        order: 3;
-        box-shadow: none;
-    }
 
-    .features-mobile .feature-item {
-        border-right: 1px solid #d1d5db;
-        padding: 0 5px;
-    }
+     /* Hide desktop features bar */
+     .features-bar.desktop-only {
+         display: none;
+     }
 
-    .features-mobile .feature-item:last-child {
-        border-right: none;
-    }
+     /* 4. Transform Form Section into a Bottom Sheet */
+     .form-section {
+         display: block;
+         width: 80%;
+         padding: 0;
+         margin-top: 40px;
+         margin-left: 50px;
+         order: 1000;
+     }
 
-    .features-mobile h4 {
-        font-size: 0.7rem;
-        line-height: 1.2;
-    }
-    
-    .top-nav { display: none; } /* Hide 'Sign Up' link in top corner */
-}
+     .login-card {
+         border-radius: 30px;
+         /* Creates the rounded 'sheet' look */
+         padding: 30px 20px;
+         box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.1);
+         animation: slideUp 0.6s ease-out;
+         /* Smooth entrance */
+     }
 
-/* --- Smooth Transition Keyframes --- */
-@keyframes slideUp {
-    from { transform: translateY(100px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+     /* 5. Style the Bottom Navigation (Mobile Features) */
+     .features-mobile {
+         display: flex;
+         background: #f1f5f3;
+         /* Light tinted background */
+         padding: 15px 10px;
+         margin-top: 0;
+         border-radius: 0;
+         max-width: 100%;
+         order: 3;
+         box-shadow: none;
+     }
+
+     .features-mobile .feature-item {
+         border-right: 1px solid #d1d5db;
+         padding: 0 5px;
+     }
+
+     .features-mobile .feature-item:last-child {
+         border-right: none;
+     }
+
+     .features-mobile h4 {
+         font-size: 0.7rem;
+         line-height: 1.2;
+     }
+
+     .top-nav {
+         display: none;
+     }
+
+     /* Hide 'Sign Up' link in top corner */
+ }
+
+ /* --- Smooth Transition Keyframes --- */
+ @keyframes slideUp {
+     from {
+         transform: translateY(100px);
+         opacity: 0;
+     }
+
+     to {
+         transform: translateY(0);
+         opacity: 1;
+     }
+ }
