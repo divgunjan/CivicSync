@@ -14,23 +14,42 @@
             <img src="styles/tsim-logo.svg" alt="Spotlight India Logo" class="main-logo">
             <span>Spotlight India</span>
         </div>
-        <a href="dashboard.html" class="btn-back-home">
-            <i class="fas fa-arrow-left"></i> Back to Home
-        </a>
+        <div class="navbar-actions">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+            <a href="dashboard.html" class="btn-back-home">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
     </header>
 
     <div class="container">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <nav>
-                <a href="#" id="btn-home" class="active"><i class="fas fa-home"></i> Home</a>
-                <a href="#" id="btn-popular"><i class="fas fa-fire"></i> Popular</a>
-                <a href="#" id="btn-map"><i class="fas fa-map-marked-alt"></i> Map View</a>
+                <button class="sidebar-toggle" id="sidebar-collapse-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <a href="#" id="btn-home" class="active"><i class="fas fa-home"></i> <span>Home</span></a>
+                <a href="#" id="btn-popular"><i class="fas fa-fire"></i> <span>Popular</span></a>
+                <a href="#" id="btn-map"><i class="fas fa-map-marked-alt"></i> <span>Map View</span></a>
             </nav>
+
+            <div class="sidebar-live">
+                <h4><i class="far fa-clock"></i> RECENT COMMUNITY REPORTS</h4>
+                <div id="sidebar-reports-list">
+                    <div class="sidebar-report-item loading">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span>Loading alerts...</span>
+                    </div>
+                </div>
+            </div>
             <div class="sidebar-stats">
                 <h4>Status Overview</h4>
-                <p>🔴 8,241 Pending</p>
-                <p>🟡 998 In Progress</p>
-                <p>🟢 3,241 Resolved</p>
+                <p>🔴 <span>8,241 Pending</span></p>
+                <p>🟡 <span>998 In Progress</span></p>
+                <p>🟢 <span>3,241 Resolved</span></p>
             </div>
         </aside>
 
@@ -47,7 +66,7 @@
                 </div>
                 <div class="post-actions-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
                     <label for="new-post-image" class="btn-upload" style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: color 0.2s;">
-                        <i class="fas fa-camera"></i> <span>Add Image</span>
+                        <i class="fas fa-photo-video"></i> <span>Add Photos/Media</span>
                     </label>
                     <input type="file" id="new-post-image" accept="image/*" style="display: none;" />
                     <button id="post-submit" class="btn-post" style="margin-top: 0;">Post Issue</button>

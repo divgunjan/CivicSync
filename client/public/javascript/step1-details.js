@@ -152,10 +152,11 @@ function renderReports(reports) {
 window.openSidebarDetails = function(r, imgHtml) {
   document.getElementById('new-complaint-view').style.display = 'none';
   const sidebar = document.getElementById('existing-report-view');
-  sidebar.style.display = 'flex';
-  
-  const daysSince = Math.floor((Date.now() - new Date(r.createdAt)) / 86400000);
-  const urgencyText = daysSince === 0 ? "Reported Today" : `${daysSince} Days Since Last Report`;
+  const currentUser = localStorage.getItem('tsim_user_email') || 'anonymous';
+  const hasFlagged = r.flaggedBy && r.flaggedBy.includes(currentUser);
+  const flagStyle = hasFlagged ? 'background:#8A97AA; cursor:not-allowed; opacity:0.7;' : 'background:#dc3545; cursor:pointer;';
+  const flagText = hasFlagged ? '🚩 You have flagged this' : '🚩 Flag & Escalate Issue';
+  const flagDisabled = hasFlagged ? 'disabled' : '';
 
   sidebar.innerHTML = `
     <div class="form-header" style="margin-bottom: 20px;">
@@ -187,7 +188,7 @@ window.openSidebarDetails = function(r, imgHtml) {
         <div style="padding: 20px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
             <span style="background:rgba(232, 131, 26, 0.1); color:#E8831A; padding:4px 10px; border-radius:100px; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">${r.status}</span>
-            <span style="font-size:13px; font-weight:600; color:#0B1F3A; background: #f4f6f9; padding: 4px 10px; border-radius: 100px;">👍 <span id="sidebar-upvotes-${r._id}">${r.upvotes}</span> Upvotes</span>
+            <span style="font-size:13px; font-weight:600; color:#dc3545; background: #fff5f5; padding: 4px 10px; border-radius: 100px; border: 1px solid #fed7d7;">🚩 <span id="sidebar-flags-${r._id}">${r.flags || 0}</span> Flags</span>
           </div>
           
           <p style="font-size:14px; color:#4a5568; line-height:1.6; margin:0 0 18px 0;">
@@ -209,8 +210,7 @@ window.openSidebarDetails = function(r, imgHtml) {
     </div>
     
     <div class="form-footer" style="padding-top:16px; border-top: 1px solid #e1e7f0; display:flex; flex-direction:column; gap:12px;">
-      <button onclick="upvoteReport('${r._id}', true)" style="background:#E8831A; color:white; border:none; padding:14px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; width:100%; transition:background 0.2s; font-family:'Poppins';" onmouseover="this.style.background='#d07517'" onmouseout="this.style.background='#E8831A'">👍 Upvote This Issue</button>
-      <button onclick="flagReport('${r._id}', true)" style="background:#dc3545; color:white; border:none; padding:14px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; width:100%; transition:background 0.2s; font-family:'Poppins';" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">🚩 Flag This Issue</button>
+      <button id="flag-btn-${r._id}" onclick="flagReport('${r._id}', true)" ${flagDisabled} style="${flagStyle} color:white; border:none; padding:14px; border-radius:8px; font-size:14px; font-weight:600; width:100%; transition:background 0.2s; font-family:'Poppins'; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);" onmouseover="if(!this.disabled) this.style.background='#c82333'" onmouseout="if(!this.disabled) this.style.background='#dc3545'">${flagText}</button>
       <button onclick="closeSidebarDetails()" style="background:none; border:none; color:#8A97AA; cursor:pointer; font-family:'Poppins'; font-size:13px; font-weight:500; transition:color 0.2s;" onmouseover="this.style.color='#0B1F3A'" onmouseout="this.style.color='#8A97AA'">← Back to Map view</button>
     </div>
   `;
@@ -236,12 +236,36 @@ window.upvoteReport = async function(id, fromSidebar = false) {
   } catch(e) { console.error(e); }
 };
 
-window.flagReport = async function(id) {
+window.flagReport = async function(id, fromSidebar = false) {
   try {
-    const res = await fetch(window.CONFIG.getEndpoint(`/report/${id}/flag`), { method: 'PATCH' });
+    const userId = localStorage.getItem('tsim_user_email') || 'anonymous';
+    const res = await fetch(window.CONFIG.getEndpoint(`/report/${id}/flag`), { 
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
+    });
     const data = await res.json();
     if (data.success) {
-      alert('Issue has been flagged.');
+      if (fromSidebar) {
+        const flagSpan = document.getElementById(`sidebar-flags-${id}`);
+        if (flagSpan) flagSpan.textContent = data.report.flags;
+        
+        const flagBtn = document.getElementById(`flag-btn-${id}`);
+        if (flagBtn) {
+          flagBtn.disabled = true;
+          flagBtn.style.background = '#8A97AA';
+          flagBtn.style.cursor = 'not-allowed';
+          flagBtn.style.opacity = '0.7';
+          flagBtn.textContent = '🚩 You have flagged this';
+        }
+        alert('This issue has been flagged and escalated to authorities.');
+      } else {
+        alert('Issue has been flagged.');
+      }
+    } else {
+      if (data.message === "Already flagged") {
+        alert("You have already flagged this issue.");
+      }
     }
   } catch(e) { console.error(e); }
 };

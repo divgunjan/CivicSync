@@ -9,7 +9,7 @@ let cameraStream = null;
 // Navigation
 // =======================
 function goToStep1() {
-  window.location.href = 'step1-location.html';
+  window.location.href = 'step1-details.html';
 }
 
 function goToStep3() {

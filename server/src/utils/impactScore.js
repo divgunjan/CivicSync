@@ -48,15 +48,18 @@ export const calculateImpactScore = async (report, ReportModel) => {
   // 2. Upvotes Points
   const upvotePoints = (report.upvotes || 0) * 3;
 
-  // 3. Time Pending (2 points per day)
+  // 3. Flag Points (Emergency Escalation)
+  const flagPoints = (report.flags || 0) * 10;
+
+  // 4. Time Pending (2 points per day)
   const createdDate = report.createdAt ? new Date(report.createdAt) : new Date();
   const daysPending = Math.floor((Date.now() - createdDate.getTime()) / 86400000);
   const timePoints = daysPending * 2;
 
-  // 4. Zone Multiplier (Placeholder for future OSM/Google Places integration)
+  // 5. Zone Multiplier (Placeholder for future OSM/Google Places integration)
   const zoneMultiplier = 1;
 
-  const finalScore = baseSeverity + nearbyMultiplier + upvotePoints + timePoints;
+  const finalScore = baseSeverity + nearbyMultiplier + upvotePoints + flagPoints + timePoints;
 
   // Determine priority based on score
   let priority = "low";
@@ -71,6 +74,7 @@ export const calculateImpactScore = async (report, ReportModel) => {
       baseSeverity,
       nearbyMultiplier,
       upvotePoints,
+      flagPoints,
       timePoints,
       zoneMultiplier
     }

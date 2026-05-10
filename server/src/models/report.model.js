@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const reportSchema = new mongoose.Schema(
   {
+    user: String,
     type: String,
     lat: Number,
     lng: Number,
@@ -32,6 +33,10 @@ const reportSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    flaggedBy: {
+      type: [String],
+      default: []
+    },
     impactScore: {
       type: Number,
       default: 0
@@ -40,6 +45,7 @@ const reportSchema = new mongoose.Schema(
       baseSeverity: { type: Number, default: 0 },
       nearbyMultiplier: { type: Number, default: 0 },
       upvotePoints: { type: Number, default: 0 },
+      flagPoints: { type: Number, default: 0 },
       timePoints: { type: Number, default: 0 },
       zoneMultiplier: { type: Number, default: 1 }
     }

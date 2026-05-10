@@ -1,3 +1,42 @@
+// ── Theme Management ──
+const themeToggle = document.getElementById('theme-toggle');
+const currentTheme = localStorage.getItem('theme') || 'light';
+
+if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+}
+
+themeToggle.addEventListener('click', () => {
+    let theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    updateMapTheme();
+});
+
+function updateMapTheme() {
+    if (!leafletMap) return;
+    const theme = document.documentElement.getAttribute('data-theme');
+    const tileUrl = theme === 'dark'
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+    // Remove existing tile layers
+    leafletMap.eachLayer(layer => {
+        if (layer instanceof L.TileLayer) {
+            leafletMap.removeLayer(layer);
+        }
+    });
+
+    L.tileLayer(tileUrl, {
+        attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(leafletMap);
+}
+
 const container = document.getElementById('post-container');
 const searchInput = document.getElementById('global-search');
 const newPostText = document.getElementById('new-post-text');
@@ -53,61 +92,170 @@ function getCommentsForPost(id) {
     return postComments[id];
 }
 
-function renderPosts(posts = activePosts) {
-    container.innerHTML = posts.map(post => `
-        <div class="post-card" data-post-id="${post.id}">
-            <div class="vote-section">
-                <button class="vote-btn upvote" data-post-id="${post.id}" aria-label="Upvote"><i class="fas fa-arrow-up"></i></button>
-                <span class="vote-count">${post.upvotes}</span>
-                <button class="vote-btn downvote" data-post-id="${post.id}" aria-label="Downvote"><i class="fas fa-arrow-down"></i></button>
+async function fetchAndRenderPosts(sortBy = 'recent') {
+    console.log("Fetching posts... sort:", sortBy);
+    try {
+        const sidebarHeader = document.querySelector('.sidebar-live h4');
+        if (sidebarHeader) {
+            sidebarHeader.innerHTML = '<i class="far fa-clock"></i> RECENT COMMUNITY REPORTS';
+        }
+
+        const url = window.CONFIG.getEndpoint(`/report?sort=${sortBy}`);
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (data.success && data.reports && data.reports.length > 0) {
+            postDatabase = data.reports;
+            activePosts = [...postDatabase];
+            renderPosts(activePosts);
+            renderSidebarReports(activePosts);
+        } else {
+            console.warn("No reports found from server, using fallback.");
+            renderSidebarReports([]); // Will trigger mock fallback
+        }
+    } catch (err) {
+        console.error("Fetch posts failed:", err);
+        renderSidebarReports([]); // Show something even on error
+    }
+}
+
+function renderSidebarReports(reports) {
+    const sidebarList = document.getElementById('sidebar-reports-list');
+    if (!sidebarList) return;
+
+    // Use reports if available, else mock data for demo
+    const dataToRender = (reports && reports.length > 0) ? reports : [
+        { _id: 'm1', type: 'Drainage', city: 'Banjara Hills', address: 'Random Address in Banjara Hills', imageUrl: 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=100' },
+        { _id: 'm2', type: 'Road', city: 'Banjara Hills', address: 'Main Road Pothole', imageUrl: 'https://images.unsplash.com/photo-1584462970582-4937a7bc9ec3?auto=format&fit=crop&q=80&w=100' },
+        { _id: 'm3', type: 'Water Supply', city: 'Kothrud', address: 'Pipe Leakage in Sector 4', imageUrl: 'https://images.unsplash.com/photo-1518331483807-f6adb0e1ad23?auto=format&fit=crop&q=80&w=100' }
+    ];
+
+    const latest = dataToRender.slice(0, 10);
+    
+    sidebarList.innerHTML = latest.map(r => {
+        const type = r.type || 'General';
+        const addr = r.address || r.city || 'Unknown Location';
+        
+        let imgHtml = '';
+        if (r.imageUrl) {
+            const isAbsolute = r.imageUrl.startsWith('http');
+            const imgSrc = isAbsolute ? r.imageUrl : window.CONFIG.getEndpoint(r.imageUrl.replace(/\\/g, '/'));
+            imgHtml = `<img src="${imgSrc}" class="sidebar-report-img">`;
+        } else {
+            imgHtml = `<div class="sidebar-report-img" style="display:flex;align-items:center;justify-content:center;background:var(--bg-light);color:var(--text-muted);font-size:10px"><i class="fas fa-image"></i></div>`;
+        }
+        
+        return `
+            <div class="sidebar-report-item" onclick="window.location.href='dashboard.html?id=${r._id}'">
+                ${imgHtml}
+                <div class="sidebar-report-info">
+                    <div class="sidebar-report-type">${type}</div>
+                    <div class="sidebar-report-addr">${addr}</div>
+                </div>
             </div>
-            <div class="post-content">
-                <div class="post-header">
-                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(post.user)}&background=random&color=fff&size=64" alt="${post.user}" class="user-avatar">
-                    <div class="post-meta-info">
-                        <div class="post-meta-top">
-                            u/${post.user} <span class="post-type-badge">${post.type}</span>
-                        </div>
-                        <div class="post-meta-bottom">
-                            in <span class="city-tag">${post.city}</span> • ${post.time}
-                        </div>
-                    </div>
+        `;
+    }).join('');
+}
+
+function renderPosts(posts, currentUserId = 'anonymous') {
+    container.innerHTML = posts.map(post => {
+        const hasUpvoted = post.upvotedBy && post.upvotedBy.includes(currentUserId);
+        const upvoteStyle = hasUpvoted ? 'style="color: var(--primary-green);"' : '';
+        const upvoteDisabled = hasUpvoted ? 'disabled' : '';
+
+        return `
+            <div class="post-card" data-post-id="${post._id}">
+                <div class="vote-section">
+                    <button class="vote-btn upvote ${hasUpvoted ? 'voted' : ''}" 
+                            data-post-id="${post._id}" 
+                            aria-label="Upvote" 
+                            ${upvoteStyle} 
+                            ${upvoteDisabled}>
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <span class="vote-count">${post.upvotes}</span>
+                    <button class="vote-btn downvote" data-post-id="${post._id}" aria-label="Downvote"><i class="fas fa-arrow-down"></i></button>
                 </div>
-                <div class="post-body">
-                    <p>${post.text}</p>
-                    ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post image" class="post-image" style="max-width: 100%; border-radius: 12px; margin-bottom: 16px; max-height: 400px; object-fit: cover; border: 1px solid var(--border-dark);">` : ''}
-                </div>
-                <div class="post-actions">
-                    <div class="action-btn comment-toggle-btn" data-post-id="${post.id}"><i class="far fa-comment"></i> ${getCommentsForPost(post.id).length} Comments</div>
-                </div>
-                <div class="comments-section" id="comments-${post.id}" style="display: none;">
-                    <div class="comments-list">
-                        ${getCommentsForPost(post.id).map(c => `
-                            <div class="comment">
-                                <strong>u/${c.user}</strong>
-                                <p>${c.text}</p>
+                <div class="post-content">
+                    <div class="post-header">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(post.user || 'Citizen')}&background=random&color=fff&size=64" alt="User" class="user-avatar">
+                        <div class="post-meta-info">
+                            <div class="post-meta-top">
+                                u/${post.user || 'Citizen'} <span class="post-type-badge">${post.type}</span>
                             </div>
-                        `).join('')}
+                            <div class="post-meta-bottom">
+                                in <span class="city-tag">${post.city}</span> • ${new Date(post.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
                     </div>
-                    <div class="add-comment">
-                        <input type="text" placeholder="Add a comment..." class="comment-input" data-post-id="${post.id}">
-                        <button class="btn-post btn-comment" data-post-id="${post.id}">Reply</button>
+                    <div class="post-body">
+                        <p>${post.description || post.text}</p>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Post image" class="post-image" style="max-width: 100%; border-radius: 12px; margin-bottom: 16px; max-height: 400px; object-fit: cover; border: 1px solid var(--border-light);">` : ''}
+                    </div>
+                    <div class="post-actions">
+                        <div class="action-btn comment-toggle-btn" data-post-id="${post._id}"><i class="far fa-comment"></i> ${getCommentsForPost(post._id).length} Comments</div>
+                    </div>
+                    <div class="comments-section" id="comments-${post._id}" style="display: none;">
+                        <div class="comments-list">
+                            ${getCommentsForPost(post._id).map(c => `
+                                <div class="comment">
+                                    <strong>u/${c.user}</strong>
+                                    <p>${c.text}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="add-comment">
+                            <input type="text" placeholder="Add a comment..." class="comment-input" data-post-id="${post._id}">
+                            <button class="btn-post btn-comment" data-post-id="${post._id}">Reply</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
     attachHandlers();
 }
 
 function attachHandlers() {
     // Vote handlers
     document.querySelectorAll('.vote-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const id = Number(button.dataset.postId);
-            const delta = button.classList.contains('upvote') ? 1 : -1;
-            updateVotes(id, delta);
-            renderPosts(activePosts);
+        button.addEventListener('click', async () => {
+            const id = button.dataset.postId;
+            const isUpvote = button.classList.contains('upvote');
+
+            if (!isUpvote) return; // Currently only handling upvotes for the restriction
+
+            const userId = localStorage.getItem('tsim_user_email') || 'anonymous';
+
+            try {
+                const res = await fetch(`http://localhost:5000/report/${id}/upvote`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    // Update the vote count in the UI
+                    const voteCountSpan = button.parentElement.querySelector('.vote-count');
+                    voteCountSpan.textContent = data.report.upvotes;
+
+                    // Mark as upvoted
+                    button.classList.add('voted');
+                    button.disabled = true;
+                    button.style.color = 'var(--primary-green)';
+                } else {
+                    if (data.message === "Already upvoted") {
+                        button.classList.add('voted');
+                        button.disabled = true;
+                        button.style.color = 'var(--primary-green)';
+                    }
+                    console.warn(data.message);
+                }
+            } catch (err) {
+                console.error("Upvote failed:", err);
+            }
         });
     });
 
@@ -164,7 +312,7 @@ function clearPostForm() {
     if (imageInput) imageInput.value = '';
     const uploadLabel = document.querySelector('.btn-upload span');
     if (uploadLabel) {
-        uploadLabel.textContent = 'Add Image';
+        uploadLabel.textContent = 'Add Photos/Media';
         uploadLabel.style.color = '';
     }
     const uploadIcon = document.querySelector('.btn-upload i');
@@ -172,44 +320,61 @@ function clearPostForm() {
 }
 
 if (postSubmit) {
-    postSubmit.addEventListener('click', () => {
+    postSubmit.addEventListener('click', async () => {
         const text = newPostText?.value.trim();
         const city = newPostCity?.value.trim() || 'Unknown City';
         const feeling = newPostFeeling?.value.trim() || 'Community Concern';
         const imageInput = document.getElementById('new-post-image');
 
-        if (!text) return;
-
-        if (imageInput && imageInput.files && imageInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const imageUrl = e.target.result;
-                savePostToDB(text, city, feeling, imageUrl);
-                completePostSubmission();
-            };
-            reader.readAsDataURL(imageInput.files[0]);
-        } else {
-            savePostToDB(text, city, feeling, null);
-            completePostSubmission();
+        if (!text) {
+            alert("Please enter a description.");
+            return;
         }
 
-        function completePostSubmission() {
-            activePosts = [...postDatabase];
-            clearPostForm();
-            if (searchInput) searchInput.value = '';
+        postSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+        postSubmit.disabled = true;
 
-            // Reset active state to Home when adding a new post
-            if (btnHome) {
-                btnHome.classList.add('active');
-                if (btnPopular) btnPopular.classList.remove('active');
-                if (btnMap) btnMap.classList.remove('active');
-                showFeed();
+        try {
+            const formData = new FormData();
+            formData.append('user', localStorage.getItem('tsim_user_id') || 'Citizen');
+            formData.append('type', feeling || 'Community Rant');
+            formData.append('city', city || 'Unknown');
+            formData.append('description', text);
+            formData.append('lat', '0'); // Placeholder or get current loc
+            formData.append('lng', '0');
+
+            if (imageInput && imageInput.files && imageInput.files[0]) {
+                formData.append('image', imageInput.files[0]);
             }
 
-            renderPosts(activePosts);
-            if (leafletMap && mapWrapper && mapWrapper.style.display === 'block') {
-                showMap();
+            const res = await fetch('http://localhost:5000/report', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok) {
+                clearPostForm();
+                if (searchInput) searchInput.value = '';
+
+                // Reset active state to Home
+                if (btnHome) {
+                    btnHome.classList.add('active');
+                    if (btnPopular) btnPopular.classList.remove('active');
+                    if (btnMap) btnMap.classList.remove('active');
+                    showFeed();
+                }
+
+                await fetchAndRenderPosts();
+            } else {
+                const err = await res.json();
+                alert("Failed to post: " + err.message);
             }
+        } catch (err) {
+            console.error("Post failed:", err);
+            alert("An error occurred while posting.");
+        } finally {
+            postSubmit.innerHTML = 'Post Issue';
+            postSubmit.disabled = false;
         }
     });
 }
@@ -224,7 +389,7 @@ if (imageInput) {
             if (uploadIcon) uploadIcon.style.color = 'var(--primary-green)';
             uploadLabel.style.color = 'var(--primary-green)';
         } else if (uploadLabel) {
-            uploadLabel.textContent = 'Add Image';
+            uploadLabel.textContent = 'Add Photos/Media';
             if (uploadIcon) uploadIcon.style.color = '';
             uploadLabel.style.color = '';
         }
@@ -259,9 +424,7 @@ function showMap() {
 
     if (!leafletMap) {
         leafletMap = L.map('map-container').setView([22.5937, 78.9629], 5);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
-        }).addTo(leafletMap);
+        updateMapTheme();
     }
 
     mapMarkers.forEach(m => leafletMap.removeLayer(m));
@@ -322,9 +485,8 @@ if (btnHome) {
         if (btnPopular) btnPopular.classList.remove('active');
         if (btnMap) btnMap.classList.remove('active');
         showFeed();
-        activePosts = [...postDatabase];
         if (searchInput) searchInput.value = '';
-        renderPosts(activePosts);
+        fetchAndRenderPosts('recent');
     });
 }
 
@@ -335,8 +497,7 @@ if (btnPopular) {
         if (btnHome) btnHome.classList.remove('active');
         if (btnMap) btnMap.classList.remove('active');
         showFeed();
-        activePosts = [...postDatabase].sort((a, b) => b.upvotes - a.upvotes);
-        renderPosts(activePosts);
+        fetchAndRenderPosts('popular');
     });
 }
 
@@ -350,4 +511,17 @@ if (btnMap) {
     });
 }
 
-renderPosts();
+const sidebar = document.getElementById('sidebar');
+const sidebarBtn = document.getElementById('sidebar-collapse-btn');
+
+if (sidebar && sidebarBtn) {
+    const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+    if (isCollapsed) sidebar.classList.add('collapsed');
+
+    sidebarBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        localStorage.setItem('sidebar-collapsed', sidebar.classList.contains('collapsed'));
+    });
+}
+
+fetchAndRenderPosts();

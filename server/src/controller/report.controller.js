@@ -16,6 +16,7 @@ export const createReport = async (req, res) => {
     }
 
     const report = new Report({
+      user: req.body.user || "Citizen",
       type: req.body.type,
       lat: Number(req.body.lat),
       lng: Number(req.body.lng),
@@ -160,8 +161,31 @@ export const upvoteReport = async (req, res) => {
 export const flagReport = async (req, res) => {
   try {
     const { id } = req.params;
-    const report = await Report.findByIdAndUpdate(id, { $inc: { flags: 1 } }, { new: true });
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User identification required" });
+    }
+
+    const report = await Report.findById(id);
     if (!report) return res.status(404).json({ message: "Report not found" });
+
+    // Check if user already flagged
+    if (report.flaggedBy && report.flaggedBy.includes(userId)) {
+      return res.status(400).json({ success: false, message: "Already flagged" });
+    }
+
+    report.flags += 1;
+    if (!report.flaggedBy) report.flaggedBy = [];
+    report.flaggedBy.push(userId);
+
+    // Recalculate Impact Score after flag
+    const impactData = await calculateImpactScore(report, Report);
+    report.impactScore = impactData.finalScore;
+    report.impactScoreBreakdown = impactData.breakdown;
+    report.priority = impactData.priority;
+
+    await report.save();
     res.json({ success: true, report });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

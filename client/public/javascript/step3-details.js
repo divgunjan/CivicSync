@@ -65,6 +65,7 @@ async function submitForm() {
     const detData = JSON.parse(sessionStorage.getItem('complaintDetails') || '{}');
 
     const formData = new FormData();
+    formData.append('user', localStorage.getItem('tsim_user_id') || 'Citizen');
     formData.append('type', detData.issue);
     formData.append('lat', locData.lat);
     formData.append('lng', locData.lng);
@@ -120,5 +121,5 @@ function downloadPDF() {
 
 function reportAnother() {
   sessionStorage.clear();
-  window.location.href = 'step1-location.html';
+  window.location.href = 'step1-details.html';
 }

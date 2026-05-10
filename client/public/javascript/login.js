@@ -10,6 +10,16 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+function getOrCreateUserId() {
+    let id = localStorage.getItem('tsim_user_id');
+    if (!id) {
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        id = `Citizen_${randomNum}`;
+        localStorage.setItem('tsim_user_id', id);
+    }
+    return id;
+}
+
 // Google Auth Handler
 window.handleGoogleLogin = async function() {
     try {
@@ -17,6 +27,7 @@ window.handleGoogleLogin = async function() {
         const user = result.user;
         localStorage.setItem('tsim_user_email', user.email);
         localStorage.setItem('tsim_user_logged_in', 'true');
+        getOrCreateUserId(); // Ensure ID exists
         window.location.href = "dashboard.html";
     } catch (error) {
         console.error("Google Auth Error:", error.code, error.message);
@@ -70,6 +81,7 @@ window.switchTab = function(clickedTab) {
                 const user = userCredential.user;
                 localStorage.setItem('tsim_user_email', user.email);
                 localStorage.setItem('tsim_user_logged_in', 'true');
+                getOrCreateUserId();
                 window.location.href = "dashboard.html";
             } else {
                 // Real Firebase Sign Up
