@@ -5,9 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Spoilt Indian Map — Spot it. Pin it. Fix it.</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/dashboard.css">
 </head>
 
@@ -18,6 +16,7 @@
     <a href="#" class="nav-logo">
       <div class="logo-pin">
         <svg viewBox="0 0 36 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 24 18 24S36 31.5 36 18C36 8.06 27.94 0 18 0z" fill="#E8831A" />
           <path d="M18 0C8.06 0 0 8.06 0 18c0 13.5 18 24 18 24S36 31.5 36 18C36 8.06 27.94 0 18 0z" fill="url(#flag)" />
           <defs>
             <linearGradient id="flag" x1="0" y1="0" x2="0" y2="42" gradientUnits="userSpaceOnUse">
@@ -41,7 +40,6 @@
       <li><a href="#how">How it Works</a></li>
       <li><a href="#impact">Impact Score</a></li>
       <li><a href="#insights">Insights</a></li>
-      <li><a href="social.html">Social</a></li>
     </ul>
 
     <div class="nav-cta">
@@ -89,7 +87,6 @@
             Track an Issue
           </a>
         </div>
-
         <div class="hero-stats">
           <div class="hero-stat">
             <div class="hero-stat-num">12,480</div>
@@ -108,14 +105,149 @@
         </div>
       </div>
 
-      <!-- D3 INDIA MAP -->
-      <div class="india-map-wrapper">
-        <div class="map-glow-bg"></div>
-        <div id="india-d3-map"></div>
-        <!-- LIVE TICKER -->
-        <div class="map-ticker">
-          <div class="ticker-dot"></div>
-          <span id="mapTicker">Bengaluru: Pothole on MG Road — Score 92</span>
+      <!-- MAP VISUAL -->
+      <div class="hero-right">
+        <div class="map-frame">
+          <div class="map-topbar">
+            <div class="map-dot" style="background:#ef4444"></div>
+            <div class="map-dot" style="background:#f59e0b"></div>
+            <div class="map-dot" style="background:#22c55e"></div>
+          </div>
+
+          <div class="map-inner">
+            <!-- India SVG silhouette (simplified) -->
+            <svg class="india-map" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M70 10 L90 5 L120 8 L145 20 L160 35 L165 55 L155 75 L160 90 L150 110 L155 130 L145 155 L130 175 L120 195 L110 215 L100 235 L90 215 L80 190 L70 170 L60 150 L55 130 L60 110 L50 90 L45 70 L40 50 L50 30 Z"
+                fill="rgba(0,0,0,0.04)" stroke="rgba(0,0,0,0.1)" stroke-width="1" />
+            </svg>
+
+            <!-- Pins -->
+            <div class="map-pins-container">
+
+              <div class="map-pin pin-red" style="top:28%; left:38%; animation-delay:0.2s">
+                <div class="pin-tooltip">
+                  Pothole — Bengaluru
+                  <div><span class="impact-chip impact-critical">CRITICAL 92</span></div>
+                </div>
+                <div class="pin-circle">
+                  <div class="pin-icon">🕳</div>
+                </div>
+                <div class="pin-tail"></div>
+              </div>
+
+              <div class="map-pin pin-amber" style="top:22%; left:55%; animation-delay:0.4s">
+                <div class="pin-tooltip">
+                  Garbage — Hyderabad
+                  <div><span class="impact-chip impact-high">HIGH 74</span></div>
+                </div>
+                <div class="pin-circle">
+                  <div class="pin-icon">🗑</div>
+                </div>
+                <div class="pin-tail"></div>
+              </div>
+
+              <div class="map-pin pin-green" style="top:15%; left:25%; animation-delay:0.6s">
+                <div class="pin-tooltip">
+                  Waterlog — Mumbai ✓ Resolved
+                </div>
+                <div class="pin-circle">
+                  <div class="pin-icon">💧</div>
+                </div>
+                <div class="pin-tail"></div>
+              </div>
+
+              <div class="map-pin pin-amber" style="top:12%; left:62%; animation-delay:0.8s">
+                <div class="pin-tooltip">
+                  Road Damage — Nagpur
+                  <div><span class="impact-chip impact-medium">MED 45</span></div>
+                </div>
+                <div class="pin-circle">
+                  <div class="pin-icon">🛣</div>
+                </div>
+                <div class="pin-tail"></div>
+              </div>
+
+              <div class="map-pin pin-red" style="top:8%; left:45%; animation-delay:1s">
+                <div class="pin-tooltip">
+                  Fallen Tree — Delhi
+                  <div><span class="impact-chip impact-critical">CRITICAL 88</span></div>
+                </div>
+                <div class="pin-circle">
+                  <div class="pin-icon">🌲</div>
+                </div>
+                <div class="pin-tail"></div>
+              </div>
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="map-sidebar">
+              <div class="sidebar-title">Live Issues</div>
+
+              <div class="issue-row">
+                <div class="issue-dot" style="background:#ef4444; box-shadow:0 0 4px rgba(239,68,68,0.3)"></div>
+                <div class="issue-info">
+                  <div class="issue-type">Pothole</div>
+                  <div class="issue-city">Bengaluru</div>
+                </div>
+                <div class="issue-score">92</div>
+              </div>
+
+              <div class="issue-row">
+                <div class="issue-dot" style="background:#ef4444; box-shadow:0 0 4px rgba(239,68,68,0.3)"></div>
+                <div class="issue-info">
+                  <div class="issue-type">Fallen Tree</div>
+                  <div class="issue-city">Delhi</div>
+                </div>
+                <div class="issue-score">88</div>
+              </div>
+
+              <div class="issue-row">
+                <div class="issue-dot" style="background:#f59e0b"></div>
+                <div class="issue-info">
+                  <div class="issue-type">Garbage</div>
+                  <div class="issue-city">Hyderabad</div>
+                </div>
+                <div class="issue-score">74</div>
+              </div>
+
+              <div class="issue-row">
+                <div class="issue-dot" style="background:#E8831A"></div>
+                <div class="issue-info">
+                  <div class="issue-type">Road Damage</div>
+                  <div class="issue-city">Nagpur</div>
+                </div>
+                <div class="issue-score">45</div>
+              </div>
+
+              <div class="issue-row">
+                <div class="issue-dot" style="background:#1FA84A; box-shadow:0 0 4px rgba(31,168,74,0.3)"></div>
+                <div class="issue-info">
+                  <div class="issue-type">Waterlog</div>
+                  <div class="issue-city">Mumbai</div>
+                </div>
+                <div>
+                  <span class="status-badge badge-resolved">✓</span>
+                </div>
+              </div>
+
+              <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(0,0,0,0.06)">
+                <div
+                  style="font-size:10px; color:var(--muted); margin-bottom:8px; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.8px; font-weight: 600;">
+                  By Status</div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <span class="status-badge badge-reported">● 8,241</span>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+                  <span class="status-badge badge-progress">● 998</span>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+                  <span class="status-badge badge-resolved">✓ 3,241</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -161,6 +293,7 @@
         transparent.</p>
 
       <div class="features-grid">
+
         <div class="feature-card">
           <div class="feature-icon icon-green">
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -235,6 +368,7 @@
           <div class="feature-desc">Live dashboard showing most reported issue types, cities with most open complaints,
             average resolution time, and policy-level trends.</div>
         </div>
+
       </div>
     </div>
   </section>
@@ -291,11 +425,8 @@
               </svg>
             </div>
             <div>
-              <div
-                style="font-size:14px; font-weight:600; color:var(--off-white); font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                Upvotes — up to 40 pts</div>
-              <div style="font-size:13px; color:var(--muted); font-family:'Plus Jakarta Sans',sans-serif;">Community
-                says "this is real and affects me"</div>
+              <div style="font-size:14px; font-weight:600; color:var(--off-white)">Upvotes — up to 40 pts</div>
+              <div style="font-size:13px; color:var(--muted)">Community says "this is real and affects me"</div>
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:14px;">
@@ -307,11 +438,8 @@
               </svg>
             </div>
             <div>
-              <div
-                style="font-size:14px; font-weight:600; color:var(--off-white); font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                Confirmations — up to 30 pts</div>
-              <div style="font-size:13px; color:var(--muted); font-family:'Plus Jakarta Sans',sans-serif;">"I see this
-                too" from other citizens</div>
+              <div style="font-size:14px; font-weight:600; color:var(--off-white)">Confirmations — up to 30 pts</div>
+              <div style="font-size:13px; color:var(--muted)">"I see this too" from other citizens</div>
             </div>
           </div>
           <div style="display:flex; align-items:center; gap:14px;">
@@ -323,11 +451,8 @@
               </svg>
             </div>
             <div>
-              <div
-                style="font-size:14px; font-weight:600; color:var(--off-white); font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                Days Unresolved — up to 30 pts</div>
-              <div style="font-size:13px; color:var(--muted); font-family:'Plus Jakarta Sans',sans-serif;">Ignored
-                issues grow in urgency automatically</div>
+              <div style="font-size:14px; font-weight:600; color:var(--off-white)">Days Unresolved — up to 30 pts</div>
+              <div style="font-size:13px; color:var(--muted)">Ignored issues grow in urgency automatically</div>
             </div>
           </div>
         </div>
@@ -373,8 +498,8 @@
         </div>
 
         <div
-          style="margin-top:12px; padding:12px; background:rgba(31,168,74,0.06); border:1px solid rgba(31,168,74,0.15); border-radius:8px; font-size:12px; color:var(--muted); line-height:1.5; font-family:'Plus Jakarta Sans',sans-serif;">
-          <span style="color:var(--green-light); font-weight:700;">↑ Score 61+</span> issues get escalation timelines
+          style="margin-top:12px; padding:12px; background:rgba(31,168,74,0.06); border:1px solid rgba(31,168,74,0.15); border-radius:8px; font-size:12px; color:var(--muted); line-height:1.5;">
+          <span style="color:var(--green-light); font-weight:600;">↑ Score 61+</span> issues get escalation timelines
           halved — 3.5 days instead of 7
         </div>
       </div>
@@ -392,6 +517,7 @@
       <div class="analytics-grid">
         <div class="analytics-card">
           <div class="analytics-card-title">Most Reported Issue Types</div>
+
           <div class="bar-row">
             <div class="bar-label">Potholes</div>
             <div class="bar-track">
@@ -439,39 +565,37 @@
         <div class="stat-chips">
           <div class="analytics-card" style="flex:1; margin-bottom:0;">
             <div class="analytics-card-title">City Spotlight</div>
+
             <div class="stat-chip">
               <div>
                 <div class="chip-label">Most Open Issues</div>
-                <div
-                  style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                  Bengaluru</div>
+                <div style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:500;">Bengaluru</div>
               </div>
               <div class="chip-val" style="color:#ef4444;">1,842</div>
             </div>
+
             <div class="stat-chip" style="margin-top:10px;">
               <div>
                 <div class="chip-label">Most Resolved</div>
-                <div
-                  style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                  Mumbai</div>
+                <div style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:500;">Mumbai</div>
               </div>
               <div class="chip-val" style="color:#1FA84A;">892</div>
             </div>
+
             <div class="stat-chip" style="margin-top:10px;">
               <div>
                 <div class="chip-label">Avg Resolution</div>
-                <div
-                  style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                  Across all cities</div>
+                <div style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:500;">Across all cities
+                </div>
               </div>
               <div class="chip-val" style="color:var(--saffron);">14d</div>
             </div>
+
             <div class="stat-chip" style="margin-top:10px;">
               <div>
                 <div class="chip-label">Highest Active Score</div>
-                <div
-                  style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:600; font-family:'Plus Jakarta Sans',sans-serif; letter-spacing:-0.02em;">
-                  Pothole · Bengaluru</div>
+                <div style="font-size:13px; color:var(--off-white); margin-top:2px; font-weight:500;">Pothole ·
+                  Bengaluru</div>
               </div>
               <div class="chip-val" style="color:#ef4444; text-shadow:0 0 8px rgba(239,68,68,0.2);">92</div>
             </div>
@@ -502,9 +626,6 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
-  <script src="javascript/config.js"></script>
   <script src="javascript/dashboard.js"></script>
 
 

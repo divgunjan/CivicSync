@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
+
 <body>
     <header class="navbar">
         <div class="logo">
@@ -55,17 +57,21 @@
 
         <section class="main-column">
             <div class="feed-header">
-                <input id="global-search" type="search" placeholder="Search by tagline, location, or issue" class="main-search">
+                <input id="global-search" type="search" placeholder="Search by tagline, location, or issue"
+                    class="main-search">
             </div>
             <div class="create-post-box">
                 <h3>Create Post</h3>
-                <textarea id="new-post-text" rows="4" placeholder="Describe the issue, location, and tagline..."></textarea>
+                <textarea id="new-post-text" rows="4"
+                    placeholder="Describe the issue, location, and tagline..."></textarea>
                 <div class="post-form-row">
                     <input id="new-post-city" type="text" placeholder="City / location" />
                     <input id="new-post-feeling" type="text" placeholder="Category or feeling" />
                 </div>
-                <div class="post-actions-row" style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
-                    <label for="new-post-image" class="btn-upload" style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: color 0.2s;">
+                <div class="post-actions-row"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                    <label for="new-post-image" class="btn-upload"
+                        style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: color 0.2s;">
                         <i class="fas fa-photo-video"></i> <span>Add Photos/Media</span>
                     </label>
                     <input type="file" id="new-post-image" accept="image/*" style="display: none;" />
@@ -73,10 +79,14 @@
                 </div>
             </div>
             <main class="feed" id="post-container"></main>
-            <div id="map-wrapper" style="display: none; position: relative; margin-top: 15px; width: 100%; height: 700px; z-index: 1;">
-                <div id="map-container" style="height: 100%; width: 100%; border-radius: 12px; background: #eef5f2;"></div>
-                <div id="map-info-overlay" style="display: flex; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; padding: 12px 24px; border-radius: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 1000; font-size: 14px; font-weight: 600; color: #4b5563; align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.07);">
-                    <span id="map-info-dot" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #22a86e; box-shadow: 0 0 6px rgba(34, 168, 110, 0.5);"></span>
+            <div id="map-wrapper"
+                style="display: none; position: relative; margin-top: 15px; width: 100%; height: 700px; z-index: 1;">
+                <div id="map-container" style="height: 100%; width: 100%; border-radius: 12px; background: #eef5f2;">
+                </div>
+                <div id="map-info-overlay"
+                    style="display: flex; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; padding: 12px 24px; border-radius: 30px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); z-index: 1000; font-size: 14px; font-weight: 600; color: #4b5563; align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.07);">
+                    <span id="map-info-dot"
+                        style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: #22a86e; box-shadow: 0 0 6px rgba(34, 168, 110, 0.5);"></span>
                     <span id="map-info-text">Delhi: Waterlogging — Score 88</span>
                 </div>
             </div>
@@ -98,4 +108,5 @@
     <script src="javascript/db.js"></script>
     <script src="javascript/social.js"></script>
 </body>
+
 </html>

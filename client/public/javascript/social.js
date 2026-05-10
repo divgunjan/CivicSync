@@ -103,7 +103,7 @@ async function fetchAndRenderPosts(sortBy = 'recent') {
         const url = window.CONFIG.getEndpoint(`/report?sort=${sortBy}`);
         const res = await fetch(url);
         const data = await res.json();
-        
+
         if (data.success && data.reports && data.reports.length > 0) {
             postDatabase = data.reports;
             activePosts = [...postDatabase];
@@ -131,11 +131,11 @@ function renderSidebarReports(reports) {
     ];
 
     const latest = dataToRender.slice(0, 10);
-    
+
     sidebarList.innerHTML = latest.map(r => {
         const type = r.type || 'General';
         const addr = r.address || r.city || 'Unknown Location';
-        
+
         let imgHtml = '';
         if (r.imageUrl) {
             const isAbsolute = r.imageUrl.startsWith('http');
@@ -144,7 +144,7 @@ function renderSidebarReports(reports) {
         } else {
             imgHtml = `<div class="sidebar-report-img" style="display:flex;align-items:center;justify-content:center;background:var(--bg-light);color:var(--text-muted);font-size:10px"><i class="fas fa-image"></i></div>`;
         }
-        
+
         return `
             <div class="sidebar-report-item" onclick="window.location.href='dashboard.html?id=${r._id}'">
                 ${imgHtml}

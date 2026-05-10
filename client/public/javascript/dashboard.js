@@ -1,5 +1,5 @@
 // ── GLOBAL UTILITIES ──────────────────────────────────────────────
-window.handleUpvote = async function(reportId, btn) {
+window.handleUpvote = async function (reportId, btn) {
   const userId = localStorage.getItem('tsim_user_email');
   if (!userId) {
     alert("Please login first to upvote issues!");
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltip.classList.remove('visible');
           });
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   // ── LIVE RANKING ──────────────────────────────────────────────────
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Keep the title
       const title = rankingContainer.querySelector('.score-demo-title');
       const footer = rankingContainer.querySelector('div[style*="background:rgba(31,168,74,0.06)"]');
-      
+
       rankingContainer.innerHTML = '';
       if (title) rankingContainer.appendChild(title);
 
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const sortedCities = Object.entries(cityCounts).sort((a, b) => b[1] - a[1]);
       const spotlightChips = document.querySelectorAll('.stat-chip');
-      
+
       if (sortedCities[0] && spotlightChips[0]) {
         spotlightChips[0].querySelector('.off-white').textContent = sortedCities[0][0];
         spotlightChips[0].querySelector('.chip-val').textContent = sortedCities[0][1];
